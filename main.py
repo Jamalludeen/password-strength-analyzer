@@ -1,7 +1,7 @@
 import tkinter as tk
 from tkinter import ttk
 from analyzer import PasswordAnalyzer
-
+from hibp_checker import HIBPChecker
 
 class PasswordAnalyzerApp:
     def __init__(self, root):
@@ -11,6 +11,7 @@ class PasswordAnalyzerApp:
         self.root.configure(bg="#1e1e1e")
 
         self.analyzer = PasswordAnalyzer()
+        self.hibp_checker = HIBPChecker()
 
         self._setup_styles()
         self._create_widgets()
@@ -32,7 +33,7 @@ class PasswordAnalyzerApp:
         style.configure("TProgressbar", thickness=20)
 
     def _create_widgets(self):
-        # ===== Top Input Row =====
+        # Top Input Row
         top = tk.Frame(self.root, bg="#1e1e1e")
         top.pack(pady=15)
 
@@ -46,7 +47,7 @@ class PasswordAnalyzerApp:
 
         ttk.Button(top, text="Analyze", command=self.analyze_password).pack(side="left", padx=10)
 
-        # ===== Summary Frame =====
+        # Summary Frame
         summary = tk.Frame(self.root, bg="#1e1e1e")
         summary.pack(pady=10, fill="x")
 
@@ -59,7 +60,7 @@ class PasswordAnalyzerApp:
         self.score_bar = ttk.Progressbar(summary, length=300, maximum=100)
         self.score_bar.pack(side="left", padx=20)
 
-        # ===== Checks Table =====
+        # Checks Table
         table_frame = tk.Frame(self.root, bg="#1e1e1e")
         table_frame.pack(pady=10, fill="both", expand=True)
 
@@ -72,7 +73,7 @@ class PasswordAnalyzerApp:
 
         self.tree.pack(fill="both", expand=True, padx=20)
 
-        # ===== Recommendations =====
+        # Recommendations
         rec_frame = tk.Frame(self.root, bg="#1e1e1e")
         rec_frame.pack(pady=10, fill="x")
 
@@ -87,31 +88,59 @@ class PasswordAnalyzerApp:
         )
         self.recommendations.pack(fill="x", padx=20)
 
+        self.hibp_label = tk.Label(
+            summary,
+            text="HIBP: -",
+            fg="white",
+            bg="#1e1e1e"
+        )
+        self.hibp_label.pack(side="left", padx=20)
+
+
     def analyze_password(self):
         password = self.password_entry.get()
+
+        # Manual Analyzer
         results = self.analyzer.analyze(password)
 
-        # ===== Summary =====
         self.length_label.config(text=f"Length: {results['password_length']}")
         self.strength_label.config(
             text=f"Strength: {results['strength']}",
             fg=self._strength_color(results['strength'])
         )
-
         self.score_bar["value"] = results["score"]
 
-        # ===== Table =====
-        self.tree.delete(*self.tree.get_children())
+        # HIBP CHECK
+        breached, count = self.hibp_checker.check_password(password)
 
+        if count == -1:
+            self.hibp_label.config(
+                text="HIBP: ⚠ Error checking",
+                fg="#ffaa00"
+            )
+        elif breached:
+            self.hibp_label.config(
+                text=f"HIBP: ❌ Breached ({count:,} times)",
+                fg="#ff5555"
+            )
+        else:
+            self.hibp_label.config(
+                text="HIBP: ✅ Not found",
+                fg="#00ff99"
+            )
+
+        # Checks Table
+        self.tree.delete(*self.tree.get_children())
         for name, data in results["checks"].items():
             status = "PASS" if data.get("passed", True) else "FAIL"
             detail = data.get("message") or data.get("rating") or data.get("value")
             self.tree.insert("", "end", values=(name, status, detail))
 
-        # ===== Recommendations =====
+        # Recommendations
         self.recommendations.delete(0, tk.END)
         for rec in results.get("recommendations", []):
             self.recommendations.insert(tk.END, f"• {rec}")
+
 
     def _strength_color(self, strength):
         return {
