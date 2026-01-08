@@ -26,7 +26,7 @@ class HIBPChecker:
             print(f"Error checking HIBP: {e}")
             return False, -1
         
-
-hibp_checker = HIBPChecker()
-result = hibp_checker.check_password("admin")
-print(result)
+if __name__ == "__main__":
+    hibp_checker = HIBPChecker()
+    result = hibp_checker.check_password("admin")
+    print(result)
