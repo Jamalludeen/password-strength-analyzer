@@ -1,0 +1,57 @@
+from typing import Dict, List, Tuple
+import math
+import re
+
+class PasswordAnalyzer:
+    def __init__(self):
+        self.min_length = 8
+        self.common_passwords = self.load_common_passwords()
+    
+    def load_common_passwords(self) -> set:
+        """
+        Load common passwords from file
+        """
+        try:
+            with open('data/common_passwords.txt', 'r') as f:
+                return set(line.strip().lower() for line in f)
+        except FileNotFoundError:
+            return set()
+    
+
+    def check_character_variety(self, password: str, results: Dict) -> int:
+        """
+        Check for different character types
+        """
+        score = 0
+        checks = [
+            ('lowercase', r'[a-z]', 10),
+            ('uppercase', r'[A-Z]', 10),
+            ('digits', r'\d', 10),
+            ('special', r'[!@#$%^&*(),.?":{}|<>]', 15)
+        ]
+
+        for name, pattern, points in checks:
+            has_type = bool(re.search(pattern, password))
+            results['check'][name] = {'passed': has_type, 'score': points if has_type else 0}
+
+            if has_type:
+                score += points
+            return score
+        
+    def calculate_entropy(self, password: str) -> float:
+        """Caculate Shannon entropy"""
+        if not password:
+            return 0
+        
+        char_count = {}
+        for char in password:
+            char_count[char] = char_count.get(char, 0) + 1
+        
+        entropy = 0
+        length = len(password)
+
+        for count in char_count.values():
+            probability = count / length
+            entropy -= probability * math.log2(probability)
+        
+        return entropy * length
