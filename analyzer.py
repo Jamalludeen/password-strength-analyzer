@@ -6,6 +6,50 @@ class PasswordAnalyzer:
     def __init__(self):
         self.min_length = 8
         self.common_passwords = self.load_common_passwords()
+
+    def analyze(self, password: str) -> Dict:
+        """
+        Main analysis method
+        """
+        results = {
+            'password_length': len(password),
+            'score': 0,
+            'max_score': 100,
+            'checks': {},
+            'recommendations': []
+        }
+
+        length_score = min(len(password) * 2, 25)
+
+        results['checks']['length'] = {
+            'passed': len(password) >= self.min_length,
+            'score': length_score,
+            'message': f'Length: {len(password)} characters'
+        }
+
+        results['score'] += length_score
+
+        results['score'] += self.check_character_variety(password, results)
+
+        entropy = self.calculate_entropy(password)
+        results['checks']['entropy'] = {
+            'value': round(entropy, 2),
+            'rating': self.rate_entropy(entropy)
+        }
+
+        is_common = password.lower() in self.common_passwords
+        results['checks']['common_passwords'] = {
+            'passed': not is_common,
+            'message': "Password is comon" if is_common else 'Password is unique'
+        }
+
+        if is_common:
+            results['score'] = max(0, results['score'] - 50)
+        
+        results['recommendations'] = self.generate_recommendations(results)
+        results['strength'] = self.get_strength_label(results['score'])
+
+        return results
     
     def load_common_passwords(self) -> set:
         """
@@ -17,7 +61,6 @@ class PasswordAnalyzer:
         except FileNotFoundError:
             return set()
     
-
     def check_character_variety(self, password: str, results: Dict) -> int:
         """
         Check for different character types
@@ -92,5 +135,3 @@ class PasswordAnalyzer:
             recommendations.append('Add numbers')
         if not checks.get('special', {}).get('passed'):
             recommendations.append('Add special characters (!@#$%^&*)')
-
-
