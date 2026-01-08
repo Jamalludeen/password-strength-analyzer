@@ -20,6 +20,7 @@ class PasswordAnalyzer:
             'recommendations': []
         }
 
+        # check for password length
         length_score = min(len(password) * 2, 25)
 
         results['checks']['length'] = {
@@ -30,14 +31,17 @@ class PasswordAnalyzer:
 
         results['score'] += length_score
 
+        # Character variety checks
         results['score'] += self.check_character_variety(password, results)
 
+        # Entropy calculation
         entropy = self.calculate_entropy(password)
         results['checks']['entropy'] = {
             'value': round(entropy, 2),
             'rating': self.rate_entropy(entropy)
         }
 
+        # check for common passwords
         is_common = password.lower() in self.common_passwords
         results['checks']['common_passwords'] = {
             'passed': not is_common,
@@ -80,7 +84,7 @@ class PasswordAnalyzer:
 
             if has_type:
                 score += points
-            return score
+        return score
         
     def calculate_entropy(self, password: str) -> float:
         """Caculate Shannon entropy"""
@@ -141,5 +145,5 @@ class PasswordAnalyzer:
 
 
 pwd_analyz = PasswordAnalyzer()
-result = pwd_analyz.analyze(password="ILo,'/vePython")
+result = pwd_analyz.analyze(password="coll/E*&^#c6t")
 pprint.pprint(result)
