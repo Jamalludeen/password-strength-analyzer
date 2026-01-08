@@ -1,6 +1,7 @@
 from typing import Dict, List, Tuple
 import math
 import re
+import pprint
 
 class PasswordAnalyzer:
     def __init__(self):
@@ -75,7 +76,7 @@ class PasswordAnalyzer:
 
         for name, pattern, points in checks:
             has_type = bool(re.search(pattern, password))
-            results['check'][name] = {'passed': has_type, 'score': points if has_type else 0}
+            results['checks'][name] = {'passed': has_type, 'score': points if has_type else 0}
 
             if has_type:
                 score += points
@@ -135,3 +136,10 @@ class PasswordAnalyzer:
             recommendations.append('Add numbers')
         if not checks.get('special', {}).get('passed'):
             recommendations.append('Add special characters (!@#$%^&*)')
+
+        return recommendations
+
+
+pwd_analyz = PasswordAnalyzer()
+result = pwd_analyz.analyze(password="ILo,'/vePython")
+pprint.pprint(result)
