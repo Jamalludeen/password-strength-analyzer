@@ -55,3 +55,42 @@ class PasswordAnalyzer:
             entropy -= probability * math.log2(probability)
         
         return entropy * length
+    
+    def rate_entropy(self, entropy: float) -> str:
+        if entropy < 28:
+            return 'Very Weak'
+        elif entropy < 36:
+            return 'Weak'
+        elif entropy < 60:
+            return 'Moderate'
+        elif entropy < 80:
+            return 'Strong'
+        return 'Very Strong'
+    
+    def get_strength_label(self, score: int) -> str:
+        if score < 20:
+            return 'Very Weak'
+        elif score < 40:
+            return 'Weak'
+        elif score < 60:
+            return 'Moderate'
+        elif score < 80:
+            return 'Strong'
+        return 'Very Strong'
+    
+    def generate_recommendations(self, results: Dict) -> List[str]:
+        recommendations = []
+        checks = results['checks']
+
+        if not checks.get('length', {}).get('passed'):
+            recommendations.append(f'Use at least {self.min_length} characters')
+        if not checks.get('uppercase', {}).get('passed'):
+            recommendations.append('Add uppercase letters')
+        if not checks.get('lowercase', {}).get('passed'):
+            recommendations.append('Add lowercase letters')
+        if not checks.get('digits', {}).get('passed'):
+            recommendations.append('Add numbers')
+        if not checks.get('special', {}).get('passed'):
+            recommendations.append('Add special characters (!@#$%^&*)')
+
+
