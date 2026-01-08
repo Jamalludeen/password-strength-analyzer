@@ -144,8 +144,8 @@ class PasswordAnalyzer:
         return recommendations
 
         
-# if __name__ == "__main__":
-#     pwd_analyz = PasswordAnalyzer()
-#     result = pwd_analyz.analyze(password="coll/E*&^#c6t")
-#     pprint.pprint(result)
+if __name__ == "__main__":
+    pwd_analyz = PasswordAnalyzer()
+    result = pwd_analyz.analyze(password="coll/E*&^#c6t")
+    pprint.pprint(result)
 

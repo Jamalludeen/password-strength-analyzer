@@ -6,7 +6,7 @@ from hibp_checker import HIBPChecker
 class PasswordAnalyzerApp:
     def __init__(self, root):
         self.root = root
-        self.root.title("Password Analyzer")
+        self.root.title("Password Strength Analyzer")
         self.root.geometry("900x550")
         self.root.configure(bg="#1e1e1e")
 
