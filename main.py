@@ -1,5 +1,7 @@
 import tkinter as tk
 from tkinter import ttk
+import threading
+
 from analyzer import PasswordAnalyzer
 from hibp_checker import HIBPChecker
 
@@ -7,7 +9,7 @@ class PasswordAnalyzerApp:
     def __init__(self, root):
         self.root = root
         self.root.title("Password Strength Analyzer")
-        self.root.geometry("900x550")
+        self.root.geometry("1200x600")
         self.root.configure(bg="#1e1e1e")
 
         self.analyzer = PasswordAnalyzer()
@@ -57,8 +59,19 @@ class PasswordAnalyzerApp:
         self.strength_label = tk.Label(summary, text="Strength: -", fg="white", bg="#1e1e1e")
         self.strength_label.pack(side="left", padx=20)
 
-        self.score_bar = ttk.Progressbar(summary, length=300, maximum=100)
+        self.score_bar = ttk.Progressbar(summary, length=300, maximum=100, mode="determinate")
+        self.score_bar["value"] = 0
         self.score_bar.pack(side="left", padx=20)
+
+        self.spinner = ttk.Progressbar(
+            summary,
+            mode="indeterminate",
+            length=120
+        )
+
+        self.spinner["value"] = 0
+
+        self.spinner.stop()
 
         # Checks Table
         table_frame = tk.Frame(self.root, bg="#1e1e1e")
@@ -103,7 +116,7 @@ class PasswordAnalyzerApp:
     def analyze_password(self):
         password = self.password_entry.get()
 
-        # Manual Analyzer
+        # Manual Analyzer (fast)
         results = self.analyzer.analyze(password)
 
         self.length_label.config(text=f"Length: {results['password_length']}")
@@ -113,8 +126,46 @@ class PasswordAnalyzerApp:
         )
         self.score_bar["value"] = results["score"]
 
-        # HIBP CHECK
+        # Start spinner
+        self.spinner.pack(side="left", padx=10)
+        self.spinner.start(10)
+        self.hibp_label.config(text="HIBP: Checking...", fg="#ffaa00")
+
+        # Run HIBP check in background
+        threading.Thread(
+            target=self._run_hibp_check,
+            args=(password,),
+            daemon=True
+        ).start()
+
+        # Update table
+        self.tree.delete(*self.tree.get_children())
+        for name, data in results["checks"].items():
+            status = "PASS" if data.get("passed", True) else "FAIL"
+            detail = data.get("message") or data.get("rating") or data.get("value")
+
+            self.tree.insert(
+                "",
+                "end",
+                values=(name.title().replace("_", " "), status, detail),
+                tags=(status,)
+            )
+
+        # Recommendations
+        self.recommendations.delete(0, tk.END)
+        for rec in results.get("recommendations", []):
+            self.recommendations.insert(tk.END, f"• {rec}")
+
+    
+    def _run_hibp_check(self, password):
         breached, count = self.hibp_checker.check_password(password)
+
+        # Update UI safely in main thread
+        self.root.after(0, self._update_hibp_ui, breached, count)
+
+
+    def _update_hibp_ui(self, breached, count):
+        self.spinner.stop()
 
         if count == -1:
             self.hibp_label.config(
@@ -131,30 +182,6 @@ class PasswordAnalyzerApp:
                 text="HIBP: ✅ Not found",
                 fg="#00ff99"
             )
-
-        # Checks Table
-        self.tree.delete(*self.tree.get_children())
-        for name, data in results["checks"].items():
-            status = "PASS" if data.get("passed", True) else "FAIL"
-            detail = data.get("message") or data.get("rating") or data.get("value")
-            self.tree.insert(
-                "",
-                "end",
-                values=(name.title().replace("_", " "), status, detail),
-                tags=(status,)
-            )
-
-        
-        self.tree_tags = {
-             "PASS": {"foreground": "#00ff99"},
-            "FAIL": {"foreground": "#ff5555"},
-        }
-
-
-        # Recommendations
-        self.recommendations.delete(0, tk.END)
-        for rec in results.get("recommendations", []):
-            self.recommendations.insert(tk.END, f"• {rec}")
 
 
     def _strength_color(self, strength):
