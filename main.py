@@ -67,6 +67,9 @@ class PasswordAnalyzerApp:
         columns = ("Check", "Status", "Details")
         self.tree = ttk.Treeview(table_frame, columns=columns, show="headings")
 
+        self.tree.tag_configure("PASS", foreground="#00ff99")
+        self.tree.tag_configure("FAIL", foreground="#ff5555")
+
         for col in columns:
             self.tree.heading(col, text=col)
             self.tree.column(col, anchor="center")
@@ -134,7 +137,19 @@ class PasswordAnalyzerApp:
         for name, data in results["checks"].items():
             status = "PASS" if data.get("passed", True) else "FAIL"
             detail = data.get("message") or data.get("rating") or data.get("value")
-            self.tree.insert("", "end", values=(name, status, detail))
+            self.tree.insert(
+                "",
+                "end",
+                values=(name.title().replace("_", " "), status, detail),
+                tags=(status,)
+            )
+
+        
+        self.tree_tags = {
+             "PASS": {"foreground": "#00ff99"},
+            "FAIL": {"foreground": "#ff5555"},
+        }
+
 
         # Recommendations
         self.recommendations.delete(0, tk.END)
