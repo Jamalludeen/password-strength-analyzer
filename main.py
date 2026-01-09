@@ -114,7 +114,20 @@ class PasswordAnalyzerApp:
 
 
     def analyze_password(self):
-        password = self.password_entry.get()
+        raw_password = self.password_entry.get()
+
+        password = raw_password.strip()
+
+        if not password:
+            self._reset_ui_for_empty_password()
+            return
+        
+
+        if raw_password != password:
+            self.hibp_label.config(
+                text="Note: Leading/trailing spaces were removed",
+                fg="#ffaa00"
+            )
 
         # Manual Analyzer (fast)
         results = self.analyzer.analyze(password)
@@ -182,6 +195,23 @@ class PasswordAnalyzerApp:
                 text="HIBP: ✅ Not found",
                 fg="#00ff99"
             )
+
+    def _reset_ui_for_empty_password(self):
+        self.length_label.config(text="Length: 0")
+        self.strength_label.config(text="Strength: -", fg="white")
+
+        self.score_bar["value"] = 0
+
+        self.hibp_label.config(
+            text="HIBP: Enter a password",
+            fg="#ffaa00"
+        )
+
+        self.spinner.stop()
+        self.spinner.pack_forget()
+
+        self.tree.delete(*self.tree.get_children())
+        self.recommendations.delete(0, tk.END)
 
 
     def _strength_color(self, strength):
