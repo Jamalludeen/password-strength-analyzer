@@ -15,7 +15,10 @@ class HIBPChecker:
             response.raise_for_status()
 
             for line in response.text.splitlines():
-                hash_suffix, count = line.split(":")
+                if ":" not in line:
+                    continue
+
+                hash_suffix, count = line.split(":", 1)
 
                 if hash_suffix == suffix:
                     return True, int(count)
