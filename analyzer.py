@@ -1,3 +1,4 @@
+from pathlib import Path
 from typing import Dict, List
 import math
 import re
@@ -6,6 +7,7 @@ import pprint
 class PasswordAnalyzer:
     def __init__(self):
         self.min_length = 8
+        self.base_dir = Path(__file__).resolve().parent
         self.common_passwords = self.load_common_passwords()
 
     def analyze(self, password: str) -> Dict:
@@ -45,7 +47,7 @@ class PasswordAnalyzer:
         is_common = password.lower() in self.common_passwords
         results['checks']['common_passwords'] = {
             'passed': not is_common,
-            'message': "Password is comon" if is_common else 'Password is unique'
+            'message': "Password is common" if is_common else 'Password is unique'
         }
 
         if is_common:
@@ -53,15 +55,33 @@ class PasswordAnalyzer:
         
         results['recommendations'] = self.generate_recommendations(results)
         results['strength'] = self.get_strength_label(results['score'])
+        results['masked_password'] = self.mask_password(password)
+        results['summary'] = self.build_summary(results)
 
         return results
+
+    def mask_password(self, password: str) -> str:
+        if not password:
+            return ''
+
+        if len(password) <= 2:
+            return '*' * len(password)
+
+        return f"{password[0]}{'*' * (len(password) - 2)}{password[-1]}"
+
+    def build_summary(self, results: Dict) -> str:
+        return (
+            f"Score: {results['score']}/100 | "
+            f"Strength: {results['strength']} | "
+            f"Length: {results['password_length']}"
+        )
     
     def load_common_passwords(self) -> set:
         """
         Load common passwords from file
         """
         try:
-            with open('data/common_passwords.txt', 'r') as f:
+            with open(self.base_dir / 'data/common_passwords.txt', 'r') as f:
                 return set(line.strip().lower() for line in f)
         except FileNotFoundError:
             return set()
@@ -87,7 +107,7 @@ class PasswordAnalyzer:
         return score
         
     def calculate_entropy(self, password: str) -> float:
-        """Caculate Shannon entropy"""
+        """Calculate Shannon entropy"""
         if not password:
             return 0
         
