@@ -2,3 +2,9 @@
 A python GUI application for analyzing password strengths.
 
 This Application is checking whether a password has appeared in known data breaches, using the Have I Been Pwned (HIBP) Pwned Passwords API.
+
+## Features
+- Live strength scoring while typing
+- HIBP breach lookup with a background request indicator
+- Recent analysis history with masked passwords
+- Copyable analysis summary for quick sharing
