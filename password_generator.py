@@ -17,6 +17,8 @@ class GeneratorOptions:
 
 class PasswordGenerator:
     AMBIGUOUS = set("0O1lI")
+    MIN_LENGTH = 4
+    MAX_LENGTH = 128
 
     def _build_pool(self, options: GeneratorOptions) -> str:
         pool_parts = []
@@ -58,8 +60,11 @@ class PasswordGenerator:
         if not groups:
             raise ValueError("At least one character type must be selected")
 
-        if options.length < 4:
-            raise ValueError("Length must be at least 4")
+        if options.length < self.MIN_LENGTH:
+            raise ValueError(f"Length must be at least {self.MIN_LENGTH}")
+
+        if options.length > self.MAX_LENGTH:
+            raise ValueError(f"Length must be at most {self.MAX_LENGTH}")
 
         pool = self._build_pool(options)
         if not pool:
