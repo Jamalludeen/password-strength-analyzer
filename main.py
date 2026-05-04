@@ -450,8 +450,13 @@ class PasswordAnalyzerApp:
 
     # ---------------- GENERATOR ---------------- #
     def _generator_options(self) -> GeneratorOptions:
+        try:
+            length = int(self.generator_length.get())
+        except (TypeError, ValueError):
+            raise ValueError("Length must be a valid number")
+
         return GeneratorOptions(
-            length=self.generator_length.get(),
+            length=length,
             use_lowercase=self.generator_use_lowercase.get(),
             use_uppercase=self.generator_use_uppercase.get(),
             use_digits=self.generator_use_digits.get(),
