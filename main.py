@@ -318,8 +318,15 @@ class PasswordAnalyzerApp:
     # ---------------- EVENTS ---------------- #
     def _bind_events(self):
         self.password_entry.bind("<KeyRelease>", self._on_password_typing)
-        self.root.bind("<Return>", lambda e: self.analyze_password())
+        self.root.bind("<Return>", self._on_enter_key)
         self.root.bind("<Escape>", lambda e: self._reset_ui_for_empty_password())
+
+    def _on_enter_key(self, event):
+        current_tab = self.notebook.index(self.notebook.select())
+        if current_tab == 0:
+            self.analyze_password()
+        else:
+            self._generate_passwords()
 
     def _toggle_password_visibility(self):
         self.password_entry.config(show="" if self.show_password.get() else "•")
