@@ -10,3 +10,5 @@ This Application is checking whether a password has appeared in known data breac
 - HIBP breach lookup with a background request indicator
 - Recent analysis history with masked passwords
 - Copyable analysis summary for quick sharing
+- Dedicated Generator tab with configurable password options
+- One-click actions to copy or analyze generated candidates
