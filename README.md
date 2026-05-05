@@ -12,3 +12,5 @@ This Application is checking whether a password has appeared in known data breac
 - Copyable analysis summary for quick sharing
 - Dedicated Generator tab with configurable password options
 - One-click actions to copy or analyze generated candidates
+- Batch summary showing average score and the strongest generated password
+- Copy Strongest action for the current generator batch
