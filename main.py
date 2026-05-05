@@ -278,6 +278,7 @@ class PasswordAnalyzerApp:
 
         ttk.Button(actions, text="Generate 5 Passwords", command=self._generate_passwords).pack(side="left", padx=6)
         ttk.Button(actions, text="Copy Selected", command=self._copy_selected_generated).pack(side="left", padx=6)
+        ttk.Button(actions, text="Copy Strongest", command=self._copy_strongest_generated).pack(side="left", padx=6)
         ttk.Button(actions, text="Analyze Selected", command=self._analyze_selected_generated).pack(side="left", padx=6)
         ttk.Button(actions, text="Clear", command=self._clear_generated_passwords).pack(side="left", padx=6)
 
@@ -533,6 +534,26 @@ class PasswordAnalyzerApp:
         self.root.clipboard_append(pwd)
         self.root.update()
         self.generator_status.config(text="Copied selected password.", fg="#00ff99")
+
+    def _copy_strongest_generated(self):
+        if not self.generated_results:
+            self.generator_status.config(text="Generate passwords first.", fg="#ffaa00")
+            return
+
+        strongest_result = max(self.generated_results, key=lambda result: result["score"])
+        strongest_password = strongest_result["masked_password"]
+
+        if not self.generated_passwords:
+            self.generator_status.config(text="Generate passwords first.", fg="#ffaa00")
+            return
+
+        strongest_index = self.generated_results.index(strongest_result)
+        strongest_password = self.generated_passwords[strongest_index]
+
+        self.root.clipboard_clear()
+        self.root.clipboard_append(strongest_password)
+        self.root.update()
+        self.generator_status.config(text="Copied strongest generated password.", fg="#00ff99")
 
     def _analyze_selected_generated(self):
         pwd = self._selected_generated_password()
