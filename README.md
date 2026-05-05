@@ -36,3 +36,15 @@ The app now uses a tabbed layout to keep the interface focused:
 - Generate five candidates at a time and inspect their strength scores.
 - Auto-selects the strongest generated candidate and shows a batch summary with average score.
 - Copy the selected candidate or the strongest candidate directly to the clipboard.
+
+## Usage
+
+1. Open the Analyzer tab and type a password to review its score, recommendations, and HIBP status.
+2. Use the Copy Summary button to grab a quick shareable result for the latest check.
+3. Switch to the Generator tab to create new passwords with the options you want.
+4. Copy a generated password, or send it back to the Analyzer tab for a full check.
+
+Keyboard support:
+
+- `Enter` runs the active tab action.
+- `Esc` clears the analyzer screen.
