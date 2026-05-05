@@ -21,3 +21,10 @@ The app now uses a tabbed layout to keep the interface focused:
 - One-click actions to copy or analyze generated candidates
 - Batch summary showing average score and the strongest generated password
 - Copy Strongest action for the current generator batch
+
+### Analyzer tab
+
+- Score and strength update as you type.
+- The checks table shows length, character variety, entropy, and common-password status.
+- Recent analyses are stored as masked history entries.
+- A copy button captures the latest summary, including the HIBP result.
