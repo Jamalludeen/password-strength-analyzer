@@ -504,6 +504,14 @@ class PasswordAnalyzerApp:
 
         self.generated_detail_label.config(text="Selected: -", fg="#00ff99")
         self._update_generator_batch_summary()
+        if self.generated_results:
+            strongest_result = max(self.generated_results, key=lambda result: result["score"])
+            strongest_index = self.generated_results.index(strongest_result)
+            self.generated_listbox.selection_clear(0, tk.END)
+            self.generated_listbox.selection_set(strongest_index)
+            self.generated_listbox.activate(strongest_index)
+            self.generated_listbox.see(strongest_index)
+            self._on_generated_select(None)
         self.generator_status.config(text="Generated 5 password candidates.", fg="#00ff99")
 
     def _selected_generated_password(self):
