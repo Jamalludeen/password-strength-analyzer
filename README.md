@@ -48,3 +48,9 @@ Keyboard support:
 
 - `Enter` runs the active tab action.
 - `Esc` clears the analyzer screen.
+
+## Notes
+
+- The app depends on the HIBP Pwned Passwords API for breach checks.
+- The Generator tab relies on the built-in password generator module.
+- Generated candidates are scored locally using the same analyzer logic as the main screen.
