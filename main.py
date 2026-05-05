@@ -26,6 +26,7 @@ class PasswordAnalyzerApp:
         self.last_summary_text = ""
 
         self.generated_passwords = []
+        self.generated_results = []
         self.generator_length = tk.IntVar(value=16)
         self.generator_use_lowercase = tk.BooleanVar(value=True)
         self.generator_use_uppercase = tk.BooleanVar(value=True)
@@ -277,6 +278,7 @@ class PasswordAnalyzerApp:
 
         ttk.Button(actions, text="Generate 5 Passwords", command=self._generate_passwords).pack(side="left", padx=6)
         ttk.Button(actions, text="Copy Selected", command=self._copy_selected_generated).pack(side="left", padx=6)
+        ttk.Button(actions, text="Copy Strongest", command=self._copy_strongest_generated).pack(side="left", padx=6)
         ttk.Button(actions, text="Analyze Selected", command=self._analyze_selected_generated).pack(side="left", padx=6)
         ttk.Button(actions, text="Clear", command=self._clear_generated_passwords).pack(side="left", padx=6)
 
@@ -314,6 +316,25 @@ class PasswordAnalyzerApp:
             anchor="w",
         )
         self.generated_detail_label.pack(fill="x", padx=20, pady=(0, 15))
+
+        summary_frame = tk.LabelFrame(
+            self.generator_tab,
+            text=" Batch Summary ",
+            bg="#1e1e1e",
+            fg="#aaaaaa",
+            padx=10,
+            pady=10,
+        )
+        summary_frame.pack(fill="x", padx=20, pady=(0, 20))
+
+        self.generator_batch_label = tk.Label(
+            summary_frame,
+            text="Average score: - | Strongest: -",
+            fg="white",
+            bg="#1e1e1e",
+            anchor="w",
+        )
+        self.generator_batch_label.pack(fill="x")
 
     # ---------------- EVENTS ---------------- #
     def _bind_events(self):
@@ -474,12 +495,23 @@ class PasswordAnalyzerApp:
             return
 
         self.generated_listbox.delete(0, tk.END)
+        self.generated_results = []
         for index, pwd in enumerate(self.generated_passwords, start=1):
             result = self.analyzer.analyze(pwd)
+            self.generated_results.append(result)
             line = f"{index}. {pwd} | Score {result['score']}/100 | {result['strength']}"
             self.generated_listbox.insert(tk.END, line)
 
         self.generated_detail_label.config(text="Selected: -", fg="#00ff99")
+        self._update_generator_batch_summary()
+        if self.generated_results:
+            strongest_result = max(self.generated_results, key=lambda result: result["score"])
+            strongest_index = self.generated_results.index(strongest_result)
+            self.generated_listbox.selection_clear(0, tk.END)
+            self.generated_listbox.selection_set(strongest_index)
+            self.generated_listbox.activate(strongest_index)
+            self.generated_listbox.see(strongest_index)
+            self._on_generated_select(None)
         self.generator_status.config(text="Generated 5 password candidates.", fg="#00ff99")
 
     def _selected_generated_password(self):
@@ -511,6 +543,26 @@ class PasswordAnalyzerApp:
         self.root.update()
         self.generator_status.config(text="Copied selected password.", fg="#00ff99")
 
+    def _copy_strongest_generated(self):
+        if not self.generated_results:
+            self.generator_status.config(text="Generate passwords first.", fg="#ffaa00")
+            return
+
+        strongest_result = max(self.generated_results, key=lambda result: result["score"])
+        strongest_password = strongest_result["masked_password"]
+
+        if not self.generated_passwords:
+            self.generator_status.config(text="Generate passwords first.", fg="#ffaa00")
+            return
+
+        strongest_index = self.generated_results.index(strongest_result)
+        strongest_password = self.generated_passwords[strongest_index]
+
+        self.root.clipboard_clear()
+        self.root.clipboard_append(strongest_password)
+        self.root.update()
+        self.generator_status.config(text="Copied strongest generated password.", fg="#00ff99")
+
     def _analyze_selected_generated(self):
         pwd = self._selected_generated_password()
         if not pwd:
@@ -525,9 +577,24 @@ class PasswordAnalyzerApp:
 
     def _clear_generated_passwords(self):
         self.generated_passwords = []
+        self.generated_results = []
         self.generated_listbox.delete(0, tk.END)
         self.generated_detail_label.config(text="Selected: -", fg="#00ff99")
+        self.generator_batch_label.config(text="Average score: - | Strongest: -")
         self.generator_status.config(text="Cleared generated passwords.", fg="#aaaaaa")
+
+    def _update_generator_batch_summary(self):
+        if not self.generated_results:
+            self.generator_batch_label.config(text="Average score: - | Strongest: -")
+            return
+
+        average_score = sum(result["score"] for result in self.generated_results) / len(self.generated_results)
+        strongest_result = max(self.generated_results, key=lambda result: result["score"])
+        strongest_summary = f"{strongest_result['strength']} ({strongest_result['score']}/100)"
+
+        self.generator_batch_label.config(
+            text=f"Average score: {average_score:.1f}/100 | Strongest: {strongest_summary}"
+        )
 
     def _reset_ui_for_empty_password(self):
         self.score_bar["value"] = 0
