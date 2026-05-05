@@ -28,3 +28,11 @@ The app now uses a tabbed layout to keep the interface focused:
 - The checks table shows length, character variety, entropy, and common-password status.
 - Recent analyses are stored as masked history entries.
 - A copy button captures the latest summary, including the HIBP result.
+
+### Generator tab
+
+- Choose password length and the character sets to include.
+- Optionally avoid ambiguous characters like `0`, `O`, `1`, `l`, and `I`.
+- Generate five candidates at a time and inspect their strength scores.
+- Auto-selects the strongest generated candidate and shows a batch summary with average score.
+- Copy the selected candidate or the strongest candidate directly to the clipboard.
