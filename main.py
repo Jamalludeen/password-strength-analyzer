@@ -301,6 +301,7 @@ class PasswordAnalyzerApp:
         ttk.Button(actions, text="Copy Strongest", command=self._copy_strongest_generated).pack(side="left", padx=6)
         ttk.Button(actions, text="Copy Batch Summary", command=self._copy_batch_summary).pack(side="left", padx=6)
         ttk.Button(actions, text="Analyze Selected", command=self._analyze_selected_generated).pack(side="left", padx=6)
+        ttk.Button(actions, text="Remove Selected", command=self._remove_selected_generated).pack(side="left", padx=6)
         ttk.Button(actions, text="Clear", command=self._clear_generated_passwords).pack(side="left", padx=6)
 
         self.generator_status = tk.Label(
@@ -641,6 +642,34 @@ class PasswordAnalyzerApp:
         self.root.clipboard_append(self.generator_batch_summary_text)
         self.root.update()
         self.generator_status.config(text="Copied batch summary.", fg="#00ff99")
+
+    def _remove_selected_generated(self):
+        selected = self.generated_listbox.curselection()
+        if not selected:
+            self.generator_status.config(text="Pick a generated password first.", fg="#ffaa00")
+            return
+
+        index = selected[0]
+        if index >= len(self.generated_passwords):
+            return
+
+        self.generated_passwords.pop(index)
+        if index < len(self.generated_results):
+            self.generated_results.pop(index)
+
+        self.generated_listbox.delete(index)
+        self._update_generator_batch_summary()
+
+        if self.generated_passwords:
+            new_index = min(index, len(self.generated_passwords) - 1)
+            self.generated_listbox.selection_set(new_index)
+            self.generated_listbox.activate(new_index)
+            self.generated_listbox.see(new_index)
+            self._on_generated_select(None)
+        else:
+            self.generated_detail_label.config(text="Selected: -", fg="#00ff99")
+
+        self.generator_status.config(text="Removed selected password.", fg="#00ff99")
 
     def _reset_ui_for_empty_password(self):
         self.score_bar["value"] = 0
