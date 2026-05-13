@@ -138,6 +138,9 @@ class PasswordAnalyzerApp:
         self.hibp_label = tk.Label(summary, text="HIBP: -", fg="white", bg="#1e1e1e")
         self.hibp_label.pack(side="left", padx=20)
 
+        self.summary_hint_label = tk.Label(summary, text="Ready", fg="#aaaaaa", bg="#1e1e1e")
+        self.summary_hint_label.pack(side="left", padx=20)
+
         table_frame = tk.LabelFrame(self.analyzer_tab, text=" Checks ", bg="#1e1e1e", fg="#aaaaaa")
         table_frame.pack(fill="both", expand=True, padx=20, pady=10)
 
@@ -494,6 +497,7 @@ class PasswordAnalyzerApp:
     def _clear_history(self):
         self.recent_analyses.clear()
         self._refresh_history_listbox()
+        self.summary_hint_label.config(text="History cleared", fg="#aaaaaa")
 
     def _format_summary_text(self, results, hibp_summary):
         return (
