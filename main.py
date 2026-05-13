@@ -24,10 +24,12 @@ class PasswordAnalyzerApp:
         self.current_results = None
         self.recent_analyses = []
         self.last_summary_text = ""
+        self.analysis_count = 0
 
         self.generated_passwords = []
         self.generated_results = []
         self.generator_length = tk.IntVar(value=16)
+        self.generator_count = tk.IntVar(value=5)
         self.generator_use_lowercase = tk.BooleanVar(value=True)
         self.generator_use_uppercase = tk.BooleanVar(value=True)
         self.generator_use_digits = tk.BooleanVar(value=True)
@@ -124,6 +126,9 @@ class PasswordAnalyzerApp:
         self.strength_label = tk.Label(summary, text="Strength: -", fg="white", bg="#1e1e1e")
         self.strength_label.pack(side="left", padx=20)
 
+        self.analysis_count_label = tk.Label(summary, text="Analyses: 0", fg="white", bg="#1e1e1e")
+        self.analysis_count_label.pack(side="left", padx=20)
+
         self.score_bar = ttk.Progressbar(summary, length=300, maximum=100)
         self.score_bar.pack(side="left", padx=20)
 
@@ -181,6 +186,7 @@ class PasswordAnalyzerApp:
             highlightthickness=0,
         )
         self.history_listbox.pack(fill="both", expand=True, padx=10, pady=10)
+        self.history_listbox.bind("<Double-Button-1>", self._copy_selected_history_entry)
 
     def _create_generator_tab(self):
         options_frame = tk.LabelFrame(
@@ -206,6 +212,20 @@ class PasswordAnalyzerApp:
             relief="flat",
         )
         self.length_spinbox.grid(row=0, column=1, padx=8, pady=6, sticky="w")
+
+        tk.Label(options_frame, text="Batch:", fg="white", bg="#1e1e1e").grid(row=0, column=2, padx=8, pady=6, sticky="w")
+        self.count_spinbox = tk.Spinbox(
+            options_frame,
+            from_=1,
+            to=10,
+            textvariable=self.generator_count,
+            width=8,
+            bg="#2d2d2d",
+            fg="white",
+            insertbackground="white",
+            relief="flat",
+        )
+        self.count_spinbox.grid(row=0, column=3, padx=8, pady=6, sticky="w")
 
         tk.Checkbutton(
             options_frame,
@@ -279,6 +299,7 @@ class PasswordAnalyzerApp:
         ttk.Button(actions, text="Generate 5 Passwords", command=self._generate_passwords).pack(side="left", padx=6)
         ttk.Button(actions, text="Copy Selected", command=self._copy_selected_generated).pack(side="left", padx=6)
         ttk.Button(actions, text="Copy Strongest", command=self._copy_strongest_generated).pack(side="left", padx=6)
+        ttk.Button(actions, text="Copy Batch Summary", command=self._copy_batch_summary).pack(side="left", padx=6)
         ttk.Button(actions, text="Analyze Selected", command=self._analyze_selected_generated).pack(side="left", padx=6)
         ttk.Button(actions, text="Clear", command=self._clear_generated_passwords).pack(side="left", padx=6)
 
@@ -335,6 +356,7 @@ class PasswordAnalyzerApp:
             anchor="w",
         )
         self.generator_batch_label.pack(fill="x")
+        self.generator_batch_summary_text = ""
 
     # ---------------- EVENTS ---------------- #
     def _bind_events(self):
@@ -379,6 +401,8 @@ class PasswordAnalyzerApp:
 
         self.current_password = password
         self.current_results = self.analyzer.analyze(password)
+        self.analysis_count += 1
+        self.analysis_count_label.config(text=f"Analyses: {self.analysis_count}")
         self.last_summary_text = self._format_summary_text(self.current_results, "HIBP: Checking...")
         self.copy_summary_btn.config(state="normal")
 
@@ -448,6 +472,16 @@ class PasswordAnalyzerApp:
         for entry in self.recent_analyses:
             self.history_listbox.insert(tk.END, entry)
 
+    def _copy_selected_history_entry(self, event):
+        selected = self.history_listbox.curselection()
+        if not selected:
+            return
+
+        entry = self.history_listbox.get(selected[0])
+        self.root.clipboard_clear()
+        self.root.clipboard_append(entry)
+        self.root.update()
+
     def _copy_summary_to_clipboard(self):
         if not self.last_summary_text:
             return
@@ -489,7 +523,8 @@ class PasswordAnalyzerApp:
     def _generate_passwords(self):
         try:
             options = self._generator_options()
-            self.generated_passwords = self.password_generator.generate_many(options, count=5)
+            batch_size = self.generator_count.get()
+            self.generated_passwords = self.password_generator.generate_many(options, count=batch_size)
         except ValueError as exc:
             self.generator_status.config(text=f"Error: {exc}", fg="#ff5555")
             return
@@ -512,7 +547,7 @@ class PasswordAnalyzerApp:
             self.generated_listbox.activate(strongest_index)
             self.generated_listbox.see(strongest_index)
             self._on_generated_select(None)
-        self.generator_status.config(text="Generated 5 password candidates.", fg="#00ff99")
+        self.generator_status.config(text=f"Generated {len(self.generated_passwords)} password candidates.", fg="#00ff99")
 
     def _selected_generated_password(self):
         selected = self.generated_listbox.curselection()
@@ -595,6 +630,17 @@ class PasswordAnalyzerApp:
         self.generator_batch_label.config(
             text=f"Average score: {average_score:.1f}/100 | Strongest: {strongest_summary}"
         )
+        self.generator_batch_summary_text = self.generator_batch_label.cget("text")
+
+    def _copy_batch_summary(self):
+        if not self.generator_batch_summary_text:
+            self.generator_status.config(text="Generate passwords first.", fg="#ffaa00")
+            return
+
+        self.root.clipboard_clear()
+        self.root.clipboard_append(self.generator_batch_summary_text)
+        self.root.update()
+        self.generator_status.config(text="Copied batch summary.", fg="#00ff99")
 
     def _reset_ui_for_empty_password(self):
         self.score_bar["value"] = 0
