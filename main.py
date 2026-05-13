@@ -575,7 +575,7 @@ class PasswordAnalyzerApp:
     def _copy_selected_generated(self):
         pwd = self._selected_generated_password()
         if not pwd:
-            self.generator_status.config(text="Pick a generated password first.", fg="#ffaa00")
+            self.generator_status.config(text="Generate or select a password first.", fg="#ffaa00")
             return
 
         self.root.clipboard_clear()
@@ -585,14 +585,14 @@ class PasswordAnalyzerApp:
 
     def _copy_strongest_generated(self):
         if not self.generated_results:
-            self.generator_status.config(text="Generate passwords first.", fg="#ffaa00")
+            self.generator_status.config(text="Generate passwords first, then use Copy Strongest.", fg="#ffaa00")
             return
 
         strongest_result = max(self.generated_results, key=lambda result: result["score"])
         strongest_password = strongest_result["masked_password"]
 
         if not self.generated_passwords:
-            self.generator_status.config(text="Generate passwords first.", fg="#ffaa00")
+            self.generator_status.config(text="Generate passwords first, then use Copy Strongest.", fg="#ffaa00")
             return
 
         strongest_index = self.generated_results.index(strongest_result)
@@ -639,7 +639,7 @@ class PasswordAnalyzerApp:
 
     def _copy_batch_summary(self):
         if not self.generator_batch_summary_text:
-            self.generator_status.config(text="Generate passwords first.", fg="#ffaa00")
+            self.generator_status.config(text="Generate passwords first, then copy the summary.", fg="#ffaa00")
             return
 
         self.root.clipboard_clear()
