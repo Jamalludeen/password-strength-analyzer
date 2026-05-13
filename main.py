@@ -299,6 +299,7 @@ class PasswordAnalyzerApp:
         ttk.Button(actions, text="Generate 5 Passwords", command=self._generate_passwords).pack(side="left", padx=6)
         ttk.Button(actions, text="Copy Selected", command=self._copy_selected_generated).pack(side="left", padx=6)
         ttk.Button(actions, text="Copy Strongest", command=self._copy_strongest_generated).pack(side="left", padx=6)
+        ttk.Button(actions, text="Copy Batch Summary", command=self._copy_batch_summary).pack(side="left", padx=6)
         ttk.Button(actions, text="Analyze Selected", command=self._analyze_selected_generated).pack(side="left", padx=6)
         ttk.Button(actions, text="Clear", command=self._clear_generated_passwords).pack(side="left", padx=6)
 
@@ -355,6 +356,7 @@ class PasswordAnalyzerApp:
             anchor="w",
         )
         self.generator_batch_label.pack(fill="x")
+        self.generator_batch_summary_text = ""
 
     # ---------------- EVENTS ---------------- #
     def _bind_events(self):
@@ -628,6 +630,17 @@ class PasswordAnalyzerApp:
         self.generator_batch_label.config(
             text=f"Average score: {average_score:.1f}/100 | Strongest: {strongest_summary}"
         )
+        self.generator_batch_summary_text = self.generator_batch_label.cget("text")
+
+    def _copy_batch_summary(self):
+        if not self.generator_batch_summary_text:
+            self.generator_status.config(text="Generate passwords first.", fg="#ffaa00")
+            return
+
+        self.root.clipboard_clear()
+        self.root.clipboard_append(self.generator_batch_summary_text)
+        self.root.update()
+        self.generator_status.config(text="Copied batch summary.", fg="#00ff99")
 
     def _reset_ui_for_empty_password(self):
         self.score_bar["value"] = 0
