@@ -29,6 +29,7 @@ class PasswordAnalyzerApp:
         self.generated_passwords = []
         self.generated_results = []
         self.generator_length = tk.IntVar(value=16)
+        self.generator_count = tk.IntVar(value=5)
         self.generator_use_lowercase = tk.BooleanVar(value=True)
         self.generator_use_uppercase = tk.BooleanVar(value=True)
         self.generator_use_digits = tk.BooleanVar(value=True)
@@ -211,6 +212,20 @@ class PasswordAnalyzerApp:
             relief="flat",
         )
         self.length_spinbox.grid(row=0, column=1, padx=8, pady=6, sticky="w")
+
+        tk.Label(options_frame, text="Batch:", fg="white", bg="#1e1e1e").grid(row=0, column=2, padx=8, pady=6, sticky="w")
+        self.count_spinbox = tk.Spinbox(
+            options_frame,
+            from_=1,
+            to=10,
+            textvariable=self.generator_count,
+            width=8,
+            bg="#2d2d2d",
+            fg="white",
+            insertbackground="white",
+            relief="flat",
+        )
+        self.count_spinbox.grid(row=0, column=3, padx=8, pady=6, sticky="w")
 
         tk.Checkbutton(
             options_frame,
@@ -506,7 +521,8 @@ class PasswordAnalyzerApp:
     def _generate_passwords(self):
         try:
             options = self._generator_options()
-            self.generated_passwords = self.password_generator.generate_many(options, count=5)
+            batch_size = self.generator_count.get()
+            self.generated_passwords = self.password_generator.generate_many(options, count=batch_size)
         except ValueError as exc:
             self.generator_status.config(text=f"Error: {exc}", fg="#ff5555")
             return
@@ -529,7 +545,7 @@ class PasswordAnalyzerApp:
             self.generated_listbox.activate(strongest_index)
             self.generated_listbox.see(strongest_index)
             self._on_generated_select(None)
-        self.generator_status.config(text="Generated 5 password candidates.", fg="#00ff99")
+        self.generator_status.config(text=f"Generated {len(self.generated_passwords)} password candidates.", fg="#00ff99")
 
     def _selected_generated_password(self):
         selected = self.generated_listbox.curselection()
