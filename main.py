@@ -185,6 +185,7 @@ class PasswordAnalyzerApp:
             highlightthickness=0,
         )
         self.history_listbox.pack(fill="both", expand=True, padx=10, pady=10)
+        self.history_listbox.bind("<Double-Button-1>", self._copy_selected_history_entry)
 
     def _create_generator_tab(self):
         options_frame = tk.LabelFrame(
@@ -453,6 +454,16 @@ class PasswordAnalyzerApp:
         self.history_listbox.delete(0, tk.END)
         for entry in self.recent_analyses:
             self.history_listbox.insert(tk.END, entry)
+
+    def _copy_selected_history_entry(self, event):
+        selected = self.history_listbox.curselection()
+        if not selected:
+            return
+
+        entry = self.history_listbox.get(selected[0])
+        self.root.clipboard_clear()
+        self.root.clipboard_append(entry)
+        self.root.update()
 
     def _copy_summary_to_clipboard(self):
         if not self.last_summary_text:
