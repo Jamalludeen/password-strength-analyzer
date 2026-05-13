@@ -21,6 +21,10 @@ The app now uses a tabbed layout to keep the interface focused:
 - One-click actions to copy or analyze generated candidates
 - Batch summary showing average score and the strongest generated password
 - Copy Strongest action for the current generator batch
+- Analyzer usage counter in the summary bar
+- Double-click history entries to copy them
+- Configurable generator batch size
+- Copy Batch Summary action for generated candidates
 
 ### Analyzer tab
 
@@ -28,14 +32,18 @@ The app now uses a tabbed layout to keep the interface focused:
 - The checks table shows length, character variety, entropy, and common-password status.
 - Recent analyses are stored as masked history entries.
 - A copy button captures the latest summary, including the HIBP result.
+- The summary bar also shows how many analyses have been run.
+- Double-click a history entry to copy it back to the clipboard.
 
 ### Generator tab
 
 - Choose password length and the character sets to include.
+- Set the batch size for each generation run.
 - Optionally avoid ambiguous characters like `0`, `O`, `1`, `l`, and `I`.
 - Generate five candidates at a time and inspect their strength scores.
 - Auto-selects the strongest generated candidate and shows a batch summary with average score.
 - Copy the selected candidate or the strongest candidate directly to the clipboard.
+- Copy the batch summary as a quick status line.
 
 ## Usage
 
