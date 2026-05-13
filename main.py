@@ -24,6 +24,7 @@ class PasswordAnalyzerApp:
         self.current_results = None
         self.recent_analyses = []
         self.last_summary_text = ""
+        self.analysis_count = 0
 
         self.generated_passwords = []
         self.generated_results = []
@@ -123,6 +124,9 @@ class PasswordAnalyzerApp:
 
         self.strength_label = tk.Label(summary, text="Strength: -", fg="white", bg="#1e1e1e")
         self.strength_label.pack(side="left", padx=20)
+
+        self.analysis_count_label = tk.Label(summary, text="Analyses: 0", fg="white", bg="#1e1e1e")
+        self.analysis_count_label.pack(side="left", padx=20)
 
         self.score_bar = ttk.Progressbar(summary, length=300, maximum=100)
         self.score_bar.pack(side="left", padx=20)
@@ -379,6 +383,8 @@ class PasswordAnalyzerApp:
 
         self.current_password = password
         self.current_results = self.analyzer.analyze(password)
+        self.analysis_count += 1
+        self.analysis_count_label.config(text=f"Analyses: {self.analysis_count}")
         self.last_summary_text = self._format_summary_text(self.current_results, "HIBP: Checking...")
         self.copy_summary_btn.config(state="normal")
 
