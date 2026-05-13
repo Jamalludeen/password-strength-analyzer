@@ -25,6 +25,8 @@ The app now uses a tabbed layout to keep the interface focused:
 - Double-click history entries to copy them
 - Configurable generator batch size
 - Copy Batch Summary action for generated candidates
+- Remove Selected action for trimming the generated batch
+- Clearer feedback when generator actions are used without a selection
 
 ### Analyzer tab
 
@@ -34,6 +36,7 @@ The app now uses a tabbed layout to keep the interface focused:
 - A copy button captures the latest summary, including the HIBP result.
 - The summary bar also shows how many analyses have been run.
 - Double-click a history entry to copy it back to the clipboard.
+- Clearing history updates the analyzer hint line.
 
 ### Generator tab
 
@@ -44,6 +47,8 @@ The app now uses a tabbed layout to keep the interface focused:
 - Auto-selects the strongest generated candidate and shows a batch summary with average score.
 - Copy the selected candidate or the strongest candidate directly to the clipboard.
 - Copy the batch summary as a quick status line.
+- Remove individual candidates from the current batch when needed.
+- Empty generator actions explain how to recover.
 
 ## Usage
 
