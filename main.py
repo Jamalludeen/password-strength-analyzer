@@ -629,7 +629,7 @@ class PasswordAnalyzerApp:
         strongest_summary = f"{strongest_result['strength']} ({strongest_result['score']}/100)"
 
         self.generator_batch_label.config(
-            text=f"Average score: {average_score:.1f}/100 | Strongest: {strongest_summary}"
+            text=f"Average score: {average_score:.1f}/100 | Strongest: {strongest_summary} | Count: {len(self.generated_results)}"
         )
         self.generator_batch_summary_text = self.generator_batch_label.cget("text")
 
