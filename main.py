@@ -105,10 +105,10 @@ class PasswordAnalyzerApp:
         self._create_generator_tab()
 
     def _create_analyzer_tab(self):
-        top = tk.Frame(self.analyzer_tab, bg="#1e1e1e")
-        top.pack(pady=20)
+        top = tk.Frame(self.analyzer_tab, bg=self.colors["bg"])
+        top.pack(pady=(18, 10), padx=20, fill="x")
 
-        tk.Label(top, text="Password:", fg="white", bg="#1e1e1e").pack(side="left", padx=5)
+        tk.Label(top, text="Password:", fg=self.colors["muted"], bg=self.colors["bg"], font=("Arial", 11, "bold")).pack(side="left", padx=(4, 8))
 
         self.password_entry = tk.Entry(
             top,
@@ -126,10 +126,10 @@ class PasswordAnalyzerApp:
             text="Show",
             variable=self.show_password,
             command=self._toggle_password_visibility,
-        ).pack(side="left", padx=8)
+        ).pack(side="left", padx=(8, 12))
 
         self.analyze_btn = ttk.Button(top, text="Analyze", command=self.analyze_password, state="disabled")
-        self.analyze_btn.pack(side="left", padx=10)
+        self.analyze_btn.pack(side="left", padx=(0, 8))
 
         self.copy_summary_btn = ttk.Button(
             top,
@@ -137,44 +137,44 @@ class PasswordAnalyzerApp:
             command=self._copy_summary_to_clipboard,
             state="disabled",
         )
-        self.copy_summary_btn.pack(side="left", padx=6)
+        self.copy_summary_btn.pack(side="left", padx=(0, 8))
 
         self.clear_history_btn = ttk.Button(top, text="Clear History", command=self._clear_history)
-        self.clear_history_btn.pack(side="left", padx=6)
+        self.clear_history_btn.pack(side="left", padx=(0, 8))
 
         summary = tk.LabelFrame(
             self.analyzer_tab,
             text=" Summary ",
-            bg="#1e1e1e",
-            fg="#aaaaaa",
+            bg=self.colors["panel"],
+            fg=self.colors["muted"],
             padx=10,
             pady=10,
         )
-        summary.pack(fill="x", padx=20)
+        summary.pack(fill="x", padx=20, pady=(0, 10))
 
-        self.length_label = tk.Label(summary, text="Length: 0", fg="white", bg="#1e1e1e")
-        self.length_label.pack(side="left", padx=20)
+        self.length_label = tk.Label(summary, text="Length: 0", fg=self.colors["text"], bg=self.colors["panel"])
+        self.length_label.pack(side="left", padx=(8, 18))
 
-        self.strength_label = tk.Label(summary, text="Strength: -", fg="white", bg="#1e1e1e")
-        self.strength_label.pack(side="left", padx=20)
+        self.strength_label = tk.Label(summary, text="Strength: -", fg=self.colors["text"], bg=self.colors["panel"])
+        self.strength_label.pack(side="left", padx=(0, 18))
 
-        self.analysis_count_label = tk.Label(summary, text="Analyses: 0", fg="white", bg="#1e1e1e")
-        self.analysis_count_label.pack(side="left", padx=20)
+        self.analysis_count_label = tk.Label(summary, text="Analyses: 0", fg=self.colors["text"], bg=self.colors["panel"])
+        self.analysis_count_label.pack(side="left", padx=(0, 18))
 
         self.score_bar = ttk.Progressbar(summary, length=300, maximum=100)
-        self.score_bar.pack(side="left", padx=20)
+        self.score_bar.pack(side="left", padx=(0, 18))
 
         self.spinner = ttk.Progressbar(summary, mode="indeterminate", length=120)
         self.spinner.stop()
 
-        self.hibp_label = tk.Label(summary, text="HIBP: -", fg="white", bg="#1e1e1e")
-        self.hibp_label.pack(side="left", padx=20)
+        self.hibp_label = tk.Label(summary, text="HIBP: -", fg=self.colors["text"], bg=self.colors["panel"])
+        self.hibp_label.pack(side="left", padx=(0, 18))
 
-        self.summary_hint_label = tk.Label(summary, text="Ready", fg="#aaaaaa", bg="#1e1e1e")
+        self.summary_hint_label = tk.Label(summary, text="Ready", fg=self.colors["muted"], bg=self.colors["panel"])
         self.summary_hint_label.pack(side="left", padx=20)
 
-        table_frame = tk.LabelFrame(self.analyzer_tab, text=" Checks ", bg="#1e1e1e", fg="#aaaaaa")
-        table_frame.pack(fill="both", expand=True, padx=20, pady=10)
+        table_frame = tk.LabelFrame(self.analyzer_tab, text=" Checks ", bg=self.colors["panel"], fg=self.colors["muted"])
+        table_frame.pack(fill="both", expand=True, padx=20, pady=(0, 10))
 
         columns = ("Check", "Status", "Details")
         self.tree = ttk.Treeview(table_frame, columns=columns, show="headings")
@@ -191,16 +191,16 @@ class PasswordAnalyzerApp:
         rec_frame = tk.LabelFrame(
             self.analyzer_tab,
             text=" Recommendations ",
-            bg="#1e1e1e",
-            fg="#aaaaaa",
+            bg=self.colors["panel"],
+            fg=self.colors["muted"],
         )
-        rec_frame.pack(fill="x", padx=20, pady=10)
+        rec_frame.pack(fill="x", padx=20, pady=(0, 10))
 
         self.recommendations = tk.Listbox(
             rec_frame,
             height=4,
-            bg="#121212",
-            fg="#00ff99",
+            bg=self.colors["field"],
+            fg=self.colors["success"],
             highlightthickness=0,
         )
         self.recommendations.pack(fill="x", padx=10, pady=5)
@@ -208,16 +208,16 @@ class PasswordAnalyzerApp:
         history_frame = tk.LabelFrame(
             self.analyzer_tab,
             text=" Recent Analyses ",
-            bg="#1e1e1e",
-            fg="#aaaaaa",
+            bg=self.colors["panel"],
+            fg=self.colors["muted"],
         )
         history_frame.pack(fill="both", expand=True, padx=20, pady=(0, 20))
 
         self.history_listbox = tk.Listbox(
             history_frame,
             height=6,
-            bg="#121212",
-            fg="white",
+            bg=self.colors["field"],
+            fg=self.colors["text"],
             highlightthickness=0,
         )
         self.history_listbox.pack(fill="both", expand=True, padx=10, pady=10)
