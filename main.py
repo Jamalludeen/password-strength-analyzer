@@ -12,7 +12,21 @@ class PasswordAnalyzerApp:
         self.root = root
         self.root.title("Password Strength Analyzer")
         self.root.geometry("1200x780")
-        self.root.configure(bg="#1e1e1e")
+        self.root.configure(bg="#121826")
+
+        self.colors = {
+            "bg": "#121826",
+            "panel": "#172033",
+            "panel_alt": "#1f2a42",
+            "text": "#f5f7fb",
+            "muted": "#a9b4c7",
+            "accent": "#7dd3fc",
+            "accent_alt": "#38bdf8",
+            "success": "#34d399",
+            "warning": "#fbbf24",
+            "danger": "#fb7185",
+            "field": "#0f172a",
+        }
 
         self.analyzer = PasswordAnalyzer()
         self.hibp_checker = HIBPChecker()
@@ -48,15 +62,33 @@ class PasswordAnalyzerApp:
 
         style.configure(
             "Treeview",
-            background="#1e1e1e",
-            foreground="white",
-            fieldbackground="#1e1e1e",
+            background=self.colors["panel"],
+            foreground=self.colors["text"],
+            fieldbackground=self.colors["panel"],
             rowheight=28,
         )
-        style.map("Treeview", background=[("selected", "#333333")])
+        style.map("Treeview", background=[("selected", self.colors["panel_alt"])])
 
         style.configure("TButton", padding=8)
         style.configure("TProgressbar", thickness=18)
+        style.configure("TNotebook", background=self.colors["bg"], borderwidth=0)
+        style.configure(
+            "TNotebook.Tab",
+            padding=(16, 8),
+            background=self.colors["panel"],
+            foreground=self.colors["muted"],
+        )
+        style.map(
+            "TNotebook.Tab",
+            background=[("selected", self.colors["panel_alt"])],
+            foreground=[("selected", self.colors["text"])],
+        )
+
+    def _configure_panel(self, widget):
+        widget.configure(bg=self.colors["panel"])
+
+    def _configure_label(self, widget, color=None):
+        widget.configure(bg=self.colors["panel"], fg=color or self.colors["text"])
 
     # ---------------- UI ---------------- #
     def _create_widgets(self):
