@@ -38,10 +38,24 @@ class PasswordAnalyzer:
 
         # Entropy calculation
         entropy = self.calculate_entropy(password)
+        entropy_rating = self.rate_entropy(entropy)
+        # Map entropy rating to a score contribution so total can reach 100
+        entropy_score_map = {
+            'Very Weak': 0,
+            'Weak': 5,
+            'Moderate': 15,
+            'Strong': 25,
+            'Very Strong': 30,
+        }
+        entropy_score = entropy_score_map.get(entropy_rating, 0)
+
         results['checks']['entropy'] = {
             'value': round(entropy, 2),
-            'rating': self.rate_entropy(entropy)
+            'rating': entropy_rating,
+            'score': entropy_score,
         }
+
+        results['score'] += entropy_score
 
         # check for common passwords
         is_common = password.lower() in self.common_passwords
