@@ -101,8 +101,22 @@ class PasswordAnalyzerApp:
         self.notebook.add(self.analyzer_tab, text="Analyzer")
         self.notebook.add(self.generator_tab, text="Generator")
 
+        self.status_bar = tk.Label(
+            self.root,
+            text="Ready",
+            anchor="w",
+            padx=14,
+            pady=8,
+            bg=self.colors["panel"],
+            fg=self.colors["muted"],
+        )
+        self.status_bar.pack(fill="x", side="bottom")
+
         self._create_analyzer_tab()
         self._create_generator_tab()
+
+    def _set_status(self, text, color=None):
+        self.status_bar.config(text=text, fg=color or self.colors["muted"])
 
     def _create_analyzer_tab(self):
         top = tk.Frame(self.analyzer_tab, bg=self.colors["bg"])
@@ -531,6 +545,7 @@ class PasswordAnalyzerApp:
         self.root.clipboard_clear()
         self.root.clipboard_append(entry)
         self.root.update()
+        self._set_status("Copied history entry", self.colors["success"])
 
     def _copy_summary_to_clipboard(self):
         if not self.last_summary_text:
@@ -539,11 +554,13 @@ class PasswordAnalyzerApp:
         self.root.clipboard_clear()
         self.root.clipboard_append(self.last_summary_text)
         self.root.update()
+        self._set_status("Copied analyzer summary", self.colors["success"])
 
     def _clear_history(self):
         self.recent_analyses.clear()
         self._refresh_history_listbox()
         self.summary_hint_label.config(text="History cleared", fg="#aaaaaa")
+        self._set_status("History cleared", self.colors["muted"])
 
     def _format_summary_text(self, results, hibp_summary):
         return (
@@ -599,6 +616,7 @@ class PasswordAnalyzerApp:
             self.generated_listbox.see(strongest_index)
             self._on_generated_select(None)
         self.generator_status.config(text=f"Generated {len(self.generated_passwords)} password candidates.", fg="#00ff99")
+        self._set_status(f"Generated {len(self.generated_passwords)} candidates", self.colors["success"])
 
     def _selected_generated_password(self):
         selected = self.generated_listbox.curselection()
@@ -628,6 +646,7 @@ class PasswordAnalyzerApp:
         self.root.clipboard_append(pwd)
         self.root.update()
         self.generator_status.config(text="Copied selected password.", fg="#00ff99")
+        self._set_status("Copied selected generated password", self.colors["success"])
 
     def _copy_strongest_generated(self):
         if not self.generated_results:
@@ -648,6 +667,7 @@ class PasswordAnalyzerApp:
         self.root.clipboard_append(strongest_password)
         self.root.update()
         self.generator_status.config(text="Copied strongest generated password.", fg="#00ff99")
+        self._set_status("Copied strongest generated password", self.colors["success"])
 
     def _analyze_selected_generated(self):
         pwd = self._selected_generated_password()
@@ -660,6 +680,7 @@ class PasswordAnalyzerApp:
         self.password_entry.insert(0, pwd)
         self.analyze_password()
         self.generator_status.config(text="Sent selected password to Analyzer tab.", fg="#00ff99")
+        self._set_status("Sent selected password to Analyzer tab", self.colors["accent"])
 
     def _clear_generated_passwords(self):
         self.generated_passwords = []
@@ -668,6 +689,7 @@ class PasswordAnalyzerApp:
         self.generated_detail_label.config(text="Selected: -", fg="#00ff99")
         self.generator_batch_label.config(text="Average score: - | Strongest: -")
         self.generator_status.config(text="Cleared generated passwords.", fg="#aaaaaa")
+        self._set_status("Cleared generated passwords", self.colors["muted"])
 
     def _update_generator_batch_summary(self):
         if not self.generated_results:
@@ -692,6 +714,7 @@ class PasswordAnalyzerApp:
         self.root.clipboard_append(self.generator_batch_summary_text)
         self.root.update()
         self.generator_status.config(text="Copied batch summary.", fg="#00ff99")
+        self._set_status("Copied batch summary", self.colors["success"])
 
     def _remove_selected_generated(self):
         selected = self.generated_listbox.curselection()
@@ -720,6 +743,7 @@ class PasswordAnalyzerApp:
             self.generated_detail_label.config(text="Selected: -", fg="#00ff99")
 
         self.generator_status.config(text="Removed selected password.", fg="#00ff99")
+        self._set_status("Removed selected password", self.colors["warning"])
 
     def _reset_ui_for_empty_password(self):
         self.score_bar["value"] = 0
@@ -735,6 +759,7 @@ class PasswordAnalyzerApp:
         self.current_results = None
         self.current_password = ""
         self.is_checking_hibp = False
+        self._set_status("Analyzer cleared", self.colors["muted"])
 
     def _strength_color(self, strength):
         return {
