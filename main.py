@@ -227,37 +227,37 @@ class PasswordAnalyzerApp:
         options_frame = tk.LabelFrame(
             self.generator_tab,
             text=" Generator Options ",
-            bg="#1e1e1e",
-            fg="#aaaaaa",
+            bg=self.colors["panel"],
+            fg=self.colors["muted"],
             padx=10,
             pady=10,
         )
-        options_frame.pack(fill="x", padx=20, pady=(20, 10))
+        options_frame.pack(fill="x", padx=20, pady=(18, 10))
 
-        tk.Label(options_frame, text="Length:", fg="white", bg="#1e1e1e").grid(row=0, column=0, padx=8, pady=6, sticky="w")
+        tk.Label(options_frame, text="Length:", fg=self.colors["text"], bg=self.colors["panel"], font=("Arial", 10, "bold")).grid(row=0, column=0, padx=8, pady=6, sticky="w")
         self.length_spinbox = tk.Spinbox(
             options_frame,
             from_=4,
             to=128,
             textvariable=self.generator_length,
             width=8,
-            bg="#2d2d2d",
-            fg="white",
-            insertbackground="white",
+            bg=self.colors["field"],
+            fg=self.colors["text"],
+            insertbackground=self.colors["text"],
             relief="flat",
         )
         self.length_spinbox.grid(row=0, column=1, padx=8, pady=6, sticky="w")
 
-        tk.Label(options_frame, text="Batch:", fg="white", bg="#1e1e1e").grid(row=0, column=2, padx=8, pady=6, sticky="w")
+        tk.Label(options_frame, text="Batch:", fg=self.colors["text"], bg=self.colors["panel"], font=("Arial", 10, "bold")).grid(row=0, column=2, padx=8, pady=6, sticky="w")
         self.count_spinbox = tk.Spinbox(
             options_frame,
             from_=1,
             to=10,
             textvariable=self.generator_count,
             width=8,
-            bg="#2d2d2d",
-            fg="white",
-            insertbackground="white",
+            bg=self.colors["field"],
+            fg=self.colors["text"],
+            insertbackground=self.colors["text"],
             relief="flat",
         )
         self.count_spinbox.grid(row=0, column=3, padx=8, pady=6, sticky="w")
@@ -266,75 +266,82 @@ class PasswordAnalyzerApp:
             options_frame,
             text="Lowercase",
             variable=self.generator_use_lowercase,
-            bg="#1e1e1e",
-            fg="white",
-            selectcolor="#2d2d2d",
-            activebackground="#1e1e1e",
-            activeforeground="white",
+            bg=self.colors["panel"],
+            fg=self.colors["text"],
+            selectcolor=self.colors["field"],
+            activebackground=self.colors["panel"],
+            activeforeground=self.colors["text"],
         ).grid(row=1, column=0, padx=8, pady=6, sticky="w")
 
         tk.Checkbutton(
             options_frame,
             text="Uppercase",
             variable=self.generator_use_uppercase,
-            bg="#1e1e1e",
-            fg="white",
-            selectcolor="#2d2d2d",
-            activebackground="#1e1e1e",
-            activeforeground="white",
+            bg=self.colors["panel"],
+            fg=self.colors["text"],
+            selectcolor=self.colors["field"],
+            activebackground=self.colors["panel"],
+            activeforeground=self.colors["text"],
         ).grid(row=1, column=1, padx=8, pady=6, sticky="w")
 
         tk.Checkbutton(
             options_frame,
             text="Digits",
             variable=self.generator_use_digits,
-            bg="#1e1e1e",
-            fg="white",
-            selectcolor="#2d2d2d",
-            activebackground="#1e1e1e",
-            activeforeground="white",
+            bg=self.colors["panel"],
+            fg=self.colors["text"],
+            selectcolor=self.colors["field"],
+            activebackground=self.colors["panel"],
+            activeforeground=self.colors["text"],
         ).grid(row=1, column=2, padx=8, pady=6, sticky="w")
 
         tk.Checkbutton(
             options_frame,
             text="Symbols",
             variable=self.generator_use_symbols,
-            bg="#1e1e1e",
-            fg="white",
-            selectcolor="#2d2d2d",
-            activebackground="#1e1e1e",
-            activeforeground="white",
+            bg=self.colors["panel"],
+            fg=self.colors["text"],
+            selectcolor=self.colors["field"],
+            activebackground=self.colors["panel"],
+            activeforeground=self.colors["text"],
         ).grid(row=1, column=3, padx=8, pady=6, sticky="w")
 
         tk.Checkbutton(
             options_frame,
             text="Avoid ambiguous chars (0/O/1/l/I)",
             variable=self.generator_avoid_ambiguous,
-            bg="#1e1e1e",
-            fg="white",
-            selectcolor="#2d2d2d",
-            activebackground="#1e1e1e",
-            activeforeground="white",
+            bg=self.colors["panel"],
+            fg=self.colors["text"],
+            selectcolor=self.colors["field"],
+            activebackground=self.colors["panel"],
+            activeforeground=self.colors["text"],
         ).grid(row=2, column=0, columnspan=2, padx=8, pady=6, sticky="w")
 
         tk.Checkbutton(
             options_frame,
             text="Require each selected character set",
             variable=self.generator_require_each,
-            bg="#1e1e1e",
-            fg="white",
-            selectcolor="#2d2d2d",
-            activebackground="#1e1e1e",
-            activeforeground="white",
+            bg=self.colors["panel"],
+            fg=self.colors["text"],
+            selectcolor=self.colors["field"],
+            activebackground=self.colors["panel"],
+            activeforeground=self.colors["text"],
         ).grid(row=2, column=2, columnspan=2, padx=8, pady=6, sticky="w")
 
-        actions = tk.Frame(self.generator_tab, bg="#1e1e1e")
+        actions = tk.LabelFrame(
+            self.generator_tab,
+            text=" Quick Actions ",
+            bg=self.colors["panel"],
+            fg=self.colors["muted"],
+            padx=10,
+            pady=10,
+        )
         actions.pack(fill="x", padx=20, pady=(0, 10))
 
-        ttk.Button(actions, text="Generate 5 Passwords", command=self._generate_passwords).pack(side="left", padx=6)
+        ttk.Button(actions, text="Generate", command=self._generate_passwords).pack(side="left", padx=6)
         ttk.Button(actions, text="Copy Selected", command=self._copy_selected_generated).pack(side="left", padx=6)
         ttk.Button(actions, text="Copy Strongest", command=self._copy_strongest_generated).pack(side="left", padx=6)
-        ttk.Button(actions, text="Copy Batch Summary", command=self._copy_batch_summary).pack(side="left", padx=6)
+        ttk.Button(actions, text="Copy Batch", command=self._copy_batch_summary).pack(side="left", padx=6)
         ttk.Button(actions, text="Analyze Selected", command=self._analyze_selected_generated).pack(side="left", padx=6)
         ttk.Button(actions, text="Remove Selected", command=self._remove_selected_generated).pack(side="left", padx=6)
         ttk.Button(actions, text="Clear", command=self._clear_generated_passwords).pack(side="left", padx=6)
@@ -342,24 +349,24 @@ class PasswordAnalyzerApp:
         self.generator_status = tk.Label(
             actions,
             text="Tip: Select options and generate candidates.",
-            fg="#aaaaaa",
-            bg="#1e1e1e",
+            fg=self.colors["muted"],
+            bg=self.colors["panel"],
         )
         self.generator_status.pack(side="right", padx=6)
 
         generated_frame = tk.LabelFrame(
             self.generator_tab,
             text=" Generated Candidates ",
-            bg="#1e1e1e",
-            fg="#aaaaaa",
+            bg=self.colors["panel"],
+            fg=self.colors["muted"],
         )
         generated_frame.pack(fill="both", expand=True, padx=20, pady=(0, 20))
 
         self.generated_listbox = tk.Listbox(
             generated_frame,
             height=12,
-            bg="#121212",
-            fg="white",
+            bg=self.colors["field"],
+            fg=self.colors["text"],
             highlightthickness=0,
         )
         self.generated_listbox.pack(fill="both", expand=True, padx=10, pady=10)
@@ -368,8 +375,8 @@ class PasswordAnalyzerApp:
         self.generated_detail_label = tk.Label(
             self.generator_tab,
             text="Selected: -",
-            fg="#00ff99",
-            bg="#1e1e1e",
+            fg=self.colors["success"],
+            bg=self.colors["bg"],
             anchor="w",
         )
         self.generated_detail_label.pack(fill="x", padx=20, pady=(0, 15))
@@ -377,8 +384,8 @@ class PasswordAnalyzerApp:
         summary_frame = tk.LabelFrame(
             self.generator_tab,
             text=" Batch Summary ",
-            bg="#1e1e1e",
-            fg="#aaaaaa",
+            bg=self.colors["panel"],
+            fg=self.colors["muted"],
             padx=10,
             pady=10,
         )
