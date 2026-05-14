@@ -181,10 +181,17 @@ class PasswordAnalyzerApp:
 
         self.tree.tag_configure("PASS", foreground="#00ff99")
         self.tree.tag_configure("FAIL", foreground="#ff5555")
+        self.tree.tag_configure("row_even", background=self.colors["panel"])
+        self.tree.tag_configure("row_odd", background=self.colors["panel_alt"])
 
         for col in columns:
             self.tree.heading(col, text=col)
             self.tree.column(col, anchor="center")
+            self.tree.heading(col, text=col.upper())
+
+        self.tree.column("Check", width=220)
+        self.tree.column("Status", width=110)
+        self.tree.column("Details", width=420)
 
         self.tree.pack(fill="both", expand=True)
 
