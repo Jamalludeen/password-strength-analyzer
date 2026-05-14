@@ -12,7 +12,21 @@ class PasswordAnalyzerApp:
         self.root = root
         self.root.title("Password Strength Analyzer")
         self.root.geometry("1200x780")
-        self.root.configure(bg="#1e1e1e")
+        self.root.configure(bg="#121826")
+
+        self.colors = {
+            "bg": "#121826",
+            "panel": "#172033",
+            "panel_alt": "#1f2a42",
+            "text": "#f5f7fb",
+            "muted": "#a9b4c7",
+            "accent": "#7dd3fc",
+            "accent_alt": "#38bdf8",
+            "success": "#34d399",
+            "warning": "#fbbf24",
+            "danger": "#fb7185",
+            "field": "#0f172a",
+        }
 
         self.analyzer = PasswordAnalyzer()
         self.hibp_checker = HIBPChecker()
@@ -48,15 +62,33 @@ class PasswordAnalyzerApp:
 
         style.configure(
             "Treeview",
-            background="#1e1e1e",
-            foreground="white",
-            fieldbackground="#1e1e1e",
+            background=self.colors["panel"],
+            foreground=self.colors["text"],
+            fieldbackground=self.colors["panel"],
             rowheight=28,
         )
-        style.map("Treeview", background=[("selected", "#333333")])
+        style.map("Treeview", background=[("selected", self.colors["panel_alt"])])
 
         style.configure("TButton", padding=8)
         style.configure("TProgressbar", thickness=18)
+        style.configure("TNotebook", background=self.colors["bg"], borderwidth=0)
+        style.configure(
+            "TNotebook.Tab",
+            padding=(16, 8),
+            background=self.colors["panel"],
+            foreground=self.colors["muted"],
+        )
+        style.map(
+            "TNotebook.Tab",
+            background=[("selected", self.colors["panel_alt"])],
+            foreground=[("selected", self.colors["text"])],
+        )
+
+    def _configure_panel(self, widget):
+        widget.configure(bg=self.colors["panel"])
+
+    def _configure_label(self, widget, color=None):
+        widget.configure(bg=self.colors["panel"], fg=color or self.colors["text"])
 
     # ---------------- UI ---------------- #
     def _create_widgets(self):
@@ -69,14 +101,28 @@ class PasswordAnalyzerApp:
         self.notebook.add(self.analyzer_tab, text="Analyzer")
         self.notebook.add(self.generator_tab, text="Generator")
 
+        self.status_bar = tk.Label(
+            self.root,
+            text="Ready",
+            anchor="w",
+            padx=14,
+            pady=8,
+            bg=self.colors["panel"],
+            fg=self.colors["muted"],
+        )
+        self.status_bar.pack(fill="x", side="bottom")
+
         self._create_analyzer_tab()
         self._create_generator_tab()
 
-    def _create_analyzer_tab(self):
-        top = tk.Frame(self.analyzer_tab, bg="#1e1e1e")
-        top.pack(pady=20)
+    def _set_status(self, text, color=None):
+        self.status_bar.config(text=text, fg=color or self.colors["muted"])
 
-        tk.Label(top, text="Password:", fg="white", bg="#1e1e1e").pack(side="left", padx=5)
+    def _create_analyzer_tab(self):
+        top = tk.Frame(self.analyzer_tab, bg=self.colors["bg"])
+        top.pack(pady=(18, 10), padx=20, fill="x")
+
+        tk.Label(top, text="Password:", fg=self.colors["muted"], bg=self.colors["bg"], font=("Arial", 11, "bold")).pack(side="left", padx=(4, 8))
 
         self.password_entry = tk.Entry(
             top,
@@ -94,10 +140,10 @@ class PasswordAnalyzerApp:
             text="Show",
             variable=self.show_password,
             command=self._toggle_password_visibility,
-        ).pack(side="left", padx=8)
+        ).pack(side="left", padx=(8, 12))
 
         self.analyze_btn = ttk.Button(top, text="Analyze", command=self.analyze_password, state="disabled")
-        self.analyze_btn.pack(side="left", padx=10)
+        self.analyze_btn.pack(side="left", padx=(0, 8))
 
         self.copy_summary_btn = ttk.Button(
             top,
@@ -105,70 +151,77 @@ class PasswordAnalyzerApp:
             command=self._copy_summary_to_clipboard,
             state="disabled",
         )
-        self.copy_summary_btn.pack(side="left", padx=6)
+        self.copy_summary_btn.pack(side="left", padx=(0, 8))
 
         self.clear_history_btn = ttk.Button(top, text="Clear History", command=self._clear_history)
-        self.clear_history_btn.pack(side="left", padx=6)
+        self.clear_history_btn.pack(side="left", padx=(0, 8))
 
         summary = tk.LabelFrame(
             self.analyzer_tab,
             text=" Summary ",
-            bg="#1e1e1e",
-            fg="#aaaaaa",
+            bg=self.colors["panel"],
+            fg=self.colors["muted"],
             padx=10,
             pady=10,
         )
-        summary.pack(fill="x", padx=20)
+        summary.pack(fill="x", padx=20, pady=(0, 10))
 
-        self.length_label = tk.Label(summary, text="Length: 0", fg="white", bg="#1e1e1e")
-        self.length_label.pack(side="left", padx=20)
+        self.length_label = tk.Label(summary, text="Length: 0", fg=self.colors["text"], bg=self.colors["panel"])
+        self.length_label.pack(side="left", padx=(8, 18))
 
-        self.strength_label = tk.Label(summary, text="Strength: -", fg="white", bg="#1e1e1e")
-        self.strength_label.pack(side="left", padx=20)
+        self.strength_label = tk.Label(summary, text="Strength: -", fg=self.colors["text"], bg=self.colors["panel"])
+        self.strength_label.pack(side="left", padx=(0, 18))
 
-        self.analysis_count_label = tk.Label(summary, text="Analyses: 0", fg="white", bg="#1e1e1e")
-        self.analysis_count_label.pack(side="left", padx=20)
+        self.analysis_count_label = tk.Label(summary, text="Analyses: 0", fg=self.colors["text"], bg=self.colors["panel"])
+        self.analysis_count_label.pack(side="left", padx=(0, 18))
 
         self.score_bar = ttk.Progressbar(summary, length=300, maximum=100)
-        self.score_bar.pack(side="left", padx=20)
+        self.score_bar.pack(side="left", padx=(0, 18))
 
         self.spinner = ttk.Progressbar(summary, mode="indeterminate", length=120)
         self.spinner.stop()
 
-        self.hibp_label = tk.Label(summary, text="HIBP: -", fg="white", bg="#1e1e1e")
-        self.hibp_label.pack(side="left", padx=20)
+        self.hibp_label = tk.Label(summary, text="HIBP: -", fg=self.colors["text"], bg=self.colors["panel"])
+        self.hibp_label.pack(side="left", padx=(0, 18))
 
-        self.summary_hint_label = tk.Label(summary, text="Ready", fg="#aaaaaa", bg="#1e1e1e")
+        self.summary_hint_label = tk.Label(summary, text="Ready", fg=self.colors["muted"], bg=self.colors["panel"])
         self.summary_hint_label.pack(side="left", padx=20)
 
-        table_frame = tk.LabelFrame(self.analyzer_tab, text=" Checks ", bg="#1e1e1e", fg="#aaaaaa")
-        table_frame.pack(fill="both", expand=True, padx=20, pady=10)
+        table_frame = tk.LabelFrame(self.analyzer_tab, text=" Checks ", bg=self.colors["panel"], fg=self.colors["muted"])
+        table_frame.pack(fill="both", expand=True, padx=20, pady=(0, 10))
 
         columns = ("Check", "Status", "Details")
         self.tree = ttk.Treeview(table_frame, columns=columns, show="headings")
 
         self.tree.tag_configure("PASS", foreground="#00ff99")
         self.tree.tag_configure("FAIL", foreground="#ff5555")
+        self.tree.tag_configure("row_even", background=self.colors["panel"])
+        self.tree.tag_configure("row_odd", background=self.colors["panel_alt"])
 
         for col in columns:
             self.tree.heading(col, text=col)
             self.tree.column(col, anchor="center")
+            self.tree.heading(col, text=col.upper())
+
+        self.tree.column("Check", width=220)
+        self.tree.column("Status", width=110)
+        self.tree.column("Details", width=420)
 
         self.tree.pack(fill="both", expand=True)
 
         rec_frame = tk.LabelFrame(
             self.analyzer_tab,
             text=" Recommendations ",
-            bg="#1e1e1e",
-            fg="#aaaaaa",
+            bg=self.colors["panel"],
+            fg=self.colors["muted"],
         )
-        rec_frame.pack(fill="x", padx=20, pady=10)
+        rec_frame.pack(fill="x", padx=20, pady=(0, 10))
 
         self.recommendations = tk.Listbox(
             rec_frame,
             height=4,
-            bg="#121212",
-            fg="#00ff99",
+            bg=self.colors["field"],
+            fg=self.colors["success"],
             highlightthickness=0,
         )
         self.recommendations.pack(fill="x", padx=10, pady=5)
@@ -176,16 +229,16 @@ class PasswordAnalyzerApp:
         history_frame = tk.LabelFrame(
             self.analyzer_tab,
             text=" Recent Analyses ",
-            bg="#1e1e1e",
-            fg="#aaaaaa",
+            bg=self.colors["panel"],
+            fg=self.colors["muted"],
         )
         history_frame.pack(fill="both", expand=True, padx=20, pady=(0, 20))
 
         self.history_listbox = tk.Listbox(
             history_frame,
             height=6,
-            bg="#121212",
-            fg="white",
+            bg=self.colors["field"],
+            fg=self.colors["text"],
             highlightthickness=0,
         )
         self.history_listbox.pack(fill="both", expand=True, padx=10, pady=10)
@@ -195,37 +248,37 @@ class PasswordAnalyzerApp:
         options_frame = tk.LabelFrame(
             self.generator_tab,
             text=" Generator Options ",
-            bg="#1e1e1e",
-            fg="#aaaaaa",
+            bg=self.colors["panel"],
+            fg=self.colors["muted"],
             padx=10,
             pady=10,
         )
-        options_frame.pack(fill="x", padx=20, pady=(20, 10))
+        options_frame.pack(fill="x", padx=20, pady=(18, 10))
 
-        tk.Label(options_frame, text="Length:", fg="white", bg="#1e1e1e").grid(row=0, column=0, padx=8, pady=6, sticky="w")
+        tk.Label(options_frame, text="Length:", fg=self.colors["text"], bg=self.colors["panel"], font=("Arial", 10, "bold")).grid(row=0, column=0, padx=8, pady=6, sticky="w")
         self.length_spinbox = tk.Spinbox(
             options_frame,
             from_=4,
             to=128,
             textvariable=self.generator_length,
             width=8,
-            bg="#2d2d2d",
-            fg="white",
-            insertbackground="white",
+            bg=self.colors["field"],
+            fg=self.colors["text"],
+            insertbackground=self.colors["text"],
             relief="flat",
         )
         self.length_spinbox.grid(row=0, column=1, padx=8, pady=6, sticky="w")
 
-        tk.Label(options_frame, text="Batch:", fg="white", bg="#1e1e1e").grid(row=0, column=2, padx=8, pady=6, sticky="w")
+        tk.Label(options_frame, text="Batch:", fg=self.colors["text"], bg=self.colors["panel"], font=("Arial", 10, "bold")).grid(row=0, column=2, padx=8, pady=6, sticky="w")
         self.count_spinbox = tk.Spinbox(
             options_frame,
             from_=1,
             to=10,
             textvariable=self.generator_count,
             width=8,
-            bg="#2d2d2d",
-            fg="white",
-            insertbackground="white",
+            bg=self.colors["field"],
+            fg=self.colors["text"],
+            insertbackground=self.colors["text"],
             relief="flat",
         )
         self.count_spinbox.grid(row=0, column=3, padx=8, pady=6, sticky="w")
@@ -234,75 +287,82 @@ class PasswordAnalyzerApp:
             options_frame,
             text="Lowercase",
             variable=self.generator_use_lowercase,
-            bg="#1e1e1e",
-            fg="white",
-            selectcolor="#2d2d2d",
-            activebackground="#1e1e1e",
-            activeforeground="white",
+            bg=self.colors["panel"],
+            fg=self.colors["text"],
+            selectcolor=self.colors["field"],
+            activebackground=self.colors["panel"],
+            activeforeground=self.colors["text"],
         ).grid(row=1, column=0, padx=8, pady=6, sticky="w")
 
         tk.Checkbutton(
             options_frame,
             text="Uppercase",
             variable=self.generator_use_uppercase,
-            bg="#1e1e1e",
-            fg="white",
-            selectcolor="#2d2d2d",
-            activebackground="#1e1e1e",
-            activeforeground="white",
+            bg=self.colors["panel"],
+            fg=self.colors["text"],
+            selectcolor=self.colors["field"],
+            activebackground=self.colors["panel"],
+            activeforeground=self.colors["text"],
         ).grid(row=1, column=1, padx=8, pady=6, sticky="w")
 
         tk.Checkbutton(
             options_frame,
             text="Digits",
             variable=self.generator_use_digits,
-            bg="#1e1e1e",
-            fg="white",
-            selectcolor="#2d2d2d",
-            activebackground="#1e1e1e",
-            activeforeground="white",
+            bg=self.colors["panel"],
+            fg=self.colors["text"],
+            selectcolor=self.colors["field"],
+            activebackground=self.colors["panel"],
+            activeforeground=self.colors["text"],
         ).grid(row=1, column=2, padx=8, pady=6, sticky="w")
 
         tk.Checkbutton(
             options_frame,
             text="Symbols",
             variable=self.generator_use_symbols,
-            bg="#1e1e1e",
-            fg="white",
-            selectcolor="#2d2d2d",
-            activebackground="#1e1e1e",
-            activeforeground="white",
+            bg=self.colors["panel"],
+            fg=self.colors["text"],
+            selectcolor=self.colors["field"],
+            activebackground=self.colors["panel"],
+            activeforeground=self.colors["text"],
         ).grid(row=1, column=3, padx=8, pady=6, sticky="w")
 
         tk.Checkbutton(
             options_frame,
             text="Avoid ambiguous chars (0/O/1/l/I)",
             variable=self.generator_avoid_ambiguous,
-            bg="#1e1e1e",
-            fg="white",
-            selectcolor="#2d2d2d",
-            activebackground="#1e1e1e",
-            activeforeground="white",
+            bg=self.colors["panel"],
+            fg=self.colors["text"],
+            selectcolor=self.colors["field"],
+            activebackground=self.colors["panel"],
+            activeforeground=self.colors["text"],
         ).grid(row=2, column=0, columnspan=2, padx=8, pady=6, sticky="w")
 
         tk.Checkbutton(
             options_frame,
             text="Require each selected character set",
             variable=self.generator_require_each,
-            bg="#1e1e1e",
-            fg="white",
-            selectcolor="#2d2d2d",
-            activebackground="#1e1e1e",
-            activeforeground="white",
+            bg=self.colors["panel"],
+            fg=self.colors["text"],
+            selectcolor=self.colors["field"],
+            activebackground=self.colors["panel"],
+            activeforeground=self.colors["text"],
         ).grid(row=2, column=2, columnspan=2, padx=8, pady=6, sticky="w")
 
-        actions = tk.Frame(self.generator_tab, bg="#1e1e1e")
+        actions = tk.LabelFrame(
+            self.generator_tab,
+            text=" Quick Actions ",
+            bg=self.colors["panel"],
+            fg=self.colors["muted"],
+            padx=10,
+            pady=10,
+        )
         actions.pack(fill="x", padx=20, pady=(0, 10))
 
-        ttk.Button(actions, text="Generate 5 Passwords", command=self._generate_passwords).pack(side="left", padx=6)
+        ttk.Button(actions, text="Generate", command=self._generate_passwords).pack(side="left", padx=6)
         ttk.Button(actions, text="Copy Selected", command=self._copy_selected_generated).pack(side="left", padx=6)
         ttk.Button(actions, text="Copy Strongest", command=self._copy_strongest_generated).pack(side="left", padx=6)
-        ttk.Button(actions, text="Copy Batch Summary", command=self._copy_batch_summary).pack(side="left", padx=6)
+        ttk.Button(actions, text="Copy Batch", command=self._copy_batch_summary).pack(side="left", padx=6)
         ttk.Button(actions, text="Analyze Selected", command=self._analyze_selected_generated).pack(side="left", padx=6)
         ttk.Button(actions, text="Remove Selected", command=self._remove_selected_generated).pack(side="left", padx=6)
         ttk.Button(actions, text="Clear", command=self._clear_generated_passwords).pack(side="left", padx=6)
@@ -310,24 +370,24 @@ class PasswordAnalyzerApp:
         self.generator_status = tk.Label(
             actions,
             text="Tip: Select options and generate candidates.",
-            fg="#aaaaaa",
-            bg="#1e1e1e",
+            fg=self.colors["muted"],
+            bg=self.colors["panel"],
         )
         self.generator_status.pack(side="right", padx=6)
 
         generated_frame = tk.LabelFrame(
             self.generator_tab,
             text=" Generated Candidates ",
-            bg="#1e1e1e",
-            fg="#aaaaaa",
+            bg=self.colors["panel"],
+            fg=self.colors["muted"],
         )
         generated_frame.pack(fill="both", expand=True, padx=20, pady=(0, 20))
 
         self.generated_listbox = tk.Listbox(
             generated_frame,
             height=12,
-            bg="#121212",
-            fg="white",
+            bg=self.colors["field"],
+            fg=self.colors["text"],
             highlightthickness=0,
         )
         self.generated_listbox.pack(fill="both", expand=True, padx=10, pady=10)
@@ -336,8 +396,8 @@ class PasswordAnalyzerApp:
         self.generated_detail_label = tk.Label(
             self.generator_tab,
             text="Selected: -",
-            fg="#00ff99",
-            bg="#1e1e1e",
+            fg=self.colors["success"],
+            bg=self.colors["bg"],
             anchor="w",
         )
         self.generated_detail_label.pack(fill="x", padx=20, pady=(0, 15))
@@ -345,8 +405,8 @@ class PasswordAnalyzerApp:
         summary_frame = tk.LabelFrame(
             self.generator_tab,
             text=" Batch Summary ",
-            bg="#1e1e1e",
-            fg="#aaaaaa",
+            bg=self.colors["panel"],
+            fg=self.colors["muted"],
             padx=10,
             pady=10,
         )
@@ -485,6 +545,7 @@ class PasswordAnalyzerApp:
         self.root.clipboard_clear()
         self.root.clipboard_append(entry)
         self.root.update()
+        self._set_status("Copied history entry", self.colors["success"])
 
     def _copy_summary_to_clipboard(self):
         if not self.last_summary_text:
@@ -493,11 +554,13 @@ class PasswordAnalyzerApp:
         self.root.clipboard_clear()
         self.root.clipboard_append(self.last_summary_text)
         self.root.update()
+        self._set_status("Copied analyzer summary", self.colors["success"])
 
     def _clear_history(self):
         self.recent_analyses.clear()
         self._refresh_history_listbox()
         self.summary_hint_label.config(text="History cleared", fg="#aaaaaa")
+        self._set_status("History cleared", self.colors["muted"])
 
     def _format_summary_text(self, results, hibp_summary):
         return (
@@ -553,6 +616,7 @@ class PasswordAnalyzerApp:
             self.generated_listbox.see(strongest_index)
             self._on_generated_select(None)
         self.generator_status.config(text=f"Generated {len(self.generated_passwords)} password candidates.", fg="#00ff99")
+        self._set_status(f"Generated {len(self.generated_passwords)} candidates", self.colors["success"])
 
     def _selected_generated_password(self):
         selected = self.generated_listbox.curselection()
@@ -582,6 +646,7 @@ class PasswordAnalyzerApp:
         self.root.clipboard_append(pwd)
         self.root.update()
         self.generator_status.config(text="Copied selected password.", fg="#00ff99")
+        self._set_status("Copied selected generated password", self.colors["success"])
 
     def _copy_strongest_generated(self):
         if not self.generated_results:
@@ -602,6 +667,7 @@ class PasswordAnalyzerApp:
         self.root.clipboard_append(strongest_password)
         self.root.update()
         self.generator_status.config(text="Copied strongest generated password.", fg="#00ff99")
+        self._set_status("Copied strongest generated password", self.colors["success"])
 
     def _analyze_selected_generated(self):
         pwd = self._selected_generated_password()
@@ -614,6 +680,7 @@ class PasswordAnalyzerApp:
         self.password_entry.insert(0, pwd)
         self.analyze_password()
         self.generator_status.config(text="Sent selected password to Analyzer tab.", fg="#00ff99")
+        self._set_status("Sent selected password to Analyzer tab", self.colors["accent"])
 
     def _clear_generated_passwords(self):
         self.generated_passwords = []
@@ -622,10 +689,11 @@ class PasswordAnalyzerApp:
         self.generated_detail_label.config(text="Selected: -", fg="#00ff99")
         self.generator_batch_label.config(text="Average score: - | Strongest: -")
         self.generator_status.config(text="Cleared generated passwords.", fg="#aaaaaa")
+        self._set_status("Cleared generated passwords", self.colors["muted"])
 
     def _update_generator_batch_summary(self):
         if not self.generated_results:
-            self.generator_batch_label.config(text="Average score: - | Strongest: -")
+            self.generator_batch_label.config(text="Average score: - | Strongest: - | Count: 0")
             return
 
         average_score = sum(result["score"] for result in self.generated_results) / len(self.generated_results)
@@ -646,6 +714,7 @@ class PasswordAnalyzerApp:
         self.root.clipboard_append(self.generator_batch_summary_text)
         self.root.update()
         self.generator_status.config(text="Copied batch summary.", fg="#00ff99")
+        self._set_status("Copied batch summary", self.colors["success"])
 
     def _remove_selected_generated(self):
         selected = self.generated_listbox.curselection()
@@ -674,6 +743,7 @@ class PasswordAnalyzerApp:
             self.generated_detail_label.config(text="Selected: -", fg="#00ff99")
 
         self.generator_status.config(text="Removed selected password.", fg="#00ff99")
+        self._set_status("Removed selected password", self.colors["warning"])
 
     def _reset_ui_for_empty_password(self):
         self.score_bar["value"] = 0
@@ -689,6 +759,7 @@ class PasswordAnalyzerApp:
         self.current_results = None
         self.current_password = ""
         self.is_checking_hibp = False
+        self._set_status("Analyzer cleared", self.colors["muted"])
 
     def _strength_color(self, strength):
         return {
