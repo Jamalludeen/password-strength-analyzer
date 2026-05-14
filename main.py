@@ -95,8 +95,8 @@ class PasswordAnalyzerApp:
         self.notebook = ttk.Notebook(self.root)
         self.notebook.pack(fill="both", expand=True)
 
-        self.analyzer_tab = tk.Frame(self.notebook, bg="#1e1e1e")
-        self.generator_tab = tk.Frame(self.notebook, bg="#1e1e1e")
+        self.analyzer_tab = tk.Frame(self.notebook, bg=self.colors["bg"])
+        self.generator_tab = tk.Frame(self.notebook, bg=self.colors["bg"])
 
         self.notebook.add(self.analyzer_tab, text="Analyzer")
         self.notebook.add(self.generator_tab, text="Generator")
@@ -116,6 +116,7 @@ class PasswordAnalyzerApp:
         self._create_generator_tab()
 
     def _set_status(self, text, color=None):
+        # Centralized status updates keep transient messages consistent.
         self.status_bar.config(text=text, fg=color or self.colors["muted"])
 
     def _create_analyzer_tab(self):
@@ -199,7 +200,6 @@ class PasswordAnalyzerApp:
         self.tree.tag_configure("row_odd", background=self.colors["panel_alt"])
 
         for col in columns:
-            self.tree.heading(col, text=col)
             self.tree.column(col, anchor="center")
             self.tree.heading(col, text=col.upper())
 
@@ -415,8 +415,8 @@ class PasswordAnalyzerApp:
         self.generator_batch_label = tk.Label(
             summary_frame,
             text="Average score: - | Strongest: -",
-            fg="white",
-            bg="#1e1e1e",
+            fg=self.colors["text"],
+            bg=self.colors["panel"],
             anchor="w",
         )
         self.generator_batch_label.pack(fill="x")
@@ -573,6 +573,7 @@ class PasswordAnalyzerApp:
 
     # ---------------- GENERATOR ---------------- #
     def _generator_options(self) -> GeneratorOptions:
+        # Build a validated options object from current UI controls.
         try:
             length = int(self.generator_length.get())
         except (TypeError, ValueError):
