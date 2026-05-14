@@ -199,7 +199,6 @@ class PasswordAnalyzerApp:
         self.tree.tag_configure("row_odd", background=self.colors["panel_alt"])
 
         for col in columns:
-            self.tree.heading(col, text=col)
             self.tree.column(col, anchor="center")
             self.tree.heading(col, text=col.upper())
 
