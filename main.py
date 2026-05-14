@@ -116,6 +116,7 @@ class PasswordAnalyzerApp:
         self._create_generator_tab()
 
     def _set_status(self, text, color=None):
+        # Centralized status updates keep transient messages consistent.
         self.status_bar.config(text=text, fg=color or self.colors["muted"])
 
     def _create_analyzer_tab(self):
@@ -572,6 +573,7 @@ class PasswordAnalyzerApp:
 
     # ---------------- GENERATOR ---------------- #
     def _generator_options(self) -> GeneratorOptions:
+        # Build a validated options object from current UI controls.
         try:
             length = int(self.generator_length.get())
         except (TypeError, ValueError):
