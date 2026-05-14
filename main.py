@@ -414,8 +414,8 @@ class PasswordAnalyzerApp:
         self.generator_batch_label = tk.Label(
             summary_frame,
             text="Average score: - | Strongest: -",
-            fg="white",
-            bg="#1e1e1e",
+            fg=self.colors["text"],
+            bg=self.colors["panel"],
             anchor="w",
         )
         self.generator_batch_label.pack(fill="x")
