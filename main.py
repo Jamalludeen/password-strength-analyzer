@@ -671,7 +671,7 @@ class PasswordAnalyzerApp:
 
     def _update_generator_batch_summary(self):
         if not self.generated_results:
-            self.generator_batch_label.config(text="Average score: - | Strongest: -")
+            self.generator_batch_label.config(text="Average score: - | Strongest: - | Count: 0")
             return
 
         average_score = sum(result["score"] for result in self.generated_results) / len(self.generated_results)
