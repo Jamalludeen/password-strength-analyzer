@@ -67,3 +67,8 @@ Keyboard support:
 - The app depends on the HIBP Pwned Passwords API for breach checks.
 - The Generator tab relies on the built-in password generator module.
 - Generated candidates are scored locally using the same analyzer logic as the main screen.
+
+## Recent polish
+
+- UI theme consistency has been improved across tabs and summary panels.
+- Minor readability cleanup was applied to the checks table setup.
