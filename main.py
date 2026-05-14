@@ -95,8 +95,8 @@ class PasswordAnalyzerApp:
         self.notebook = ttk.Notebook(self.root)
         self.notebook.pack(fill="both", expand=True)
 
-        self.analyzer_tab = tk.Frame(self.notebook, bg="#1e1e1e")
-        self.generator_tab = tk.Frame(self.notebook, bg="#1e1e1e")
+        self.analyzer_tab = tk.Frame(self.notebook, bg=self.colors["bg"])
+        self.generator_tab = tk.Frame(self.notebook, bg=self.colors["bg"])
 
         self.notebook.add(self.analyzer_tab, text="Analyzer")
         self.notebook.add(self.generator_tab, text="Generator")
