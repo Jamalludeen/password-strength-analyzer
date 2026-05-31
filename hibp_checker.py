@@ -35,6 +35,8 @@ class HIBPChecker:
             return False, -1
         
 if __name__ == "__main__":
+    # Configure simple logging for local debugging when run directly.
+    logging.basicConfig(level=logging.DEBUG, format="%(levelname)s: %(message)s")
     hibp_checker = HIBPChecker()
     result = hibp_checker.check_password("admin")
     print(result)

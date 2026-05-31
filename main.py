@@ -11,6 +11,11 @@ from password_generator import GeneratorOptions, PasswordGenerator
 
 
 class PasswordAnalyzerApp:
+    """Main application UI class.
+
+    Responsible for constructing the tabbed interface, wiring actions,
+    and mediating between the UI and analysis/generator helpers.
+    """
     def __init__(self, root):
         self.root = root
         self.root.title("Password Strength Analyzer")

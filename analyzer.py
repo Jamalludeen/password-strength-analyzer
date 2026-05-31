@@ -142,6 +142,9 @@ class PasswordAnalyzer:
         return entropy * length
     
     def rate_entropy(self, entropy: float) -> str:
+        # Thresholds chosen heuristically: lower values indicate predictable
+        # or repeated-character patterns; higher values imply greater unpredictability.
+        # These buckets map entropy to human-readable ratings used elsewhere.
         if entropy < 28:
             return 'Very Weak'
         elif entropy < 36:
