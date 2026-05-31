@@ -95,3 +95,13 @@ class PasswordGenerator:
             raise ValueError("Count must be at least 1")
 
         return [self.generate_one(options) for _ in range(count)]
+
+
+def example_generate() -> List[str]:
+    """Return a short sample batch using the default options.
+
+    This helper is safe to import and can be used by REPLs or tests.
+    """
+    gen = PasswordGenerator()
+    opts = GeneratorOptions()
+    return gen.generate_many(opts, count=3)
