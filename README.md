@@ -72,3 +72,4 @@ Keyboard support:
 
 - UI theme consistency has been improved across tabs and summary panels.
 - Minor readability cleanup was applied to the checks table setup.
+- Several micro UI and documentation tweaks were made in small commits for clarity.

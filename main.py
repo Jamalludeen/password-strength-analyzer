@@ -2,6 +2,9 @@ import threading
 import tkinter as tk
 from tkinter import ttk
 
+# Small note: `PasswordAnalyzerApp` is the main UI entrypoint for the
+# application. This file focuses on UI glue and light presentation helpers.
+
 from analyzer import PasswordAnalyzer
 from hibp_checker import HIBPChecker
 from password_generator import GeneratorOptions, PasswordGenerator

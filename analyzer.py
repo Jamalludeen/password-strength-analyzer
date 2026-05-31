@@ -4,6 +4,9 @@ import math
 import re
 import pprint
 
+# Note: entropy is scaled and bucketed into score contributions so that
+# the combined length/variety/entropy checks can reach a 0-100 score.
+
 class PasswordAnalyzer:
     def __init__(self):
         self.min_length = 8
