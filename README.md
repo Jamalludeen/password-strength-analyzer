@@ -73,3 +73,14 @@ Keyboard support:
 - UI theme consistency has been improved across tabs and summary panels.
 - Minor readability cleanup was applied to the checks table setup.
 - Several micro UI and documentation tweaks were made in small commits for clarity.
+
+## Troubleshooting Tip
+
+- If HIBP lookups fail intermittently, enable debug logging to see network errors:
+
+  ```python
+  import logging
+  logging.basicConfig(level=logging.DEBUG)
+  ```
+
+  This will surface connection errors from the HIBP helper during local runs.
