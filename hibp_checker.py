@@ -1,5 +1,9 @@
 import hashlib
+import logging
 import requests
+
+# Use a module-level logger so callers can configure verbosity externally.
+logger = logging.getLogger(__name__)
 
 class HIBPChecker:
     API_URL = "https://api.pwnedpasswords.com/range/"
@@ -26,7 +30,8 @@ class HIBPChecker:
             return False, 0
         
         except requests.RequestException as e:
-            print(f"Error checking HIBP: {e}")
+            # Network errors should not crash the UI; report via logger.
+            logger.debug("Error checking HIBP: %s", e)
             return False, -1
         
 if __name__ == "__main__":
