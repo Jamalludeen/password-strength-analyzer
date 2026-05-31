@@ -3,6 +3,12 @@ import string
 from dataclasses import dataclass
 from typing import List
 
+"""Small password generator helper:
+AMBIGUOUS contains characters that can be confusing (e.g. "0" vs "O").
+The generator supports options to avoid these and to require at least one
+character from each selected set.
+"""
+
 
 @dataclass
 class GeneratorOptions:
