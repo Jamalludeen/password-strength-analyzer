@@ -132,6 +132,16 @@ class PasswordAnalyzerApp:
         # Centralized status updates keep transient messages consistent.
         self.status_bar.config(text=text, fg=color or self.colors["muted"])
 
+    def _safe_int_parse(self, var, default=0):
+        """Safely parse IntVar-like objects to int with a fallback.
+
+        Useful when reading user-provided spinbox values.
+        """
+        try:
+            return int(var.get())
+        except Exception:
+            return default
+
     def _create_analyzer_tab(self):
         top = tk.Frame(self.analyzer_tab, bg=self.colors["bg"])
         top.pack(pady=(18, 10), padx=20, fill="x")
