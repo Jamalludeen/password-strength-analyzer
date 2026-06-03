@@ -105,3 +105,6 @@ def example_generate() -> List[str]:
     gen = PasswordGenerator()
     opts = GeneratorOptions()
     return gen.generate_many(opts, count=3)
+
+# Validation note: generator enforces minimum length and at least one
+# selected character group when `require_each_selected` is enabled.
