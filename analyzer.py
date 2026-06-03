@@ -191,3 +191,14 @@ if __name__ == "__main__":
     result = pwd_analyz.analyze(password="coll/E*&^#c6t")
     pprint.pprint(result)
 
+
+def _run_quick_tests():
+    """Run a couple of quick sanity checks useful during local development."""
+    pa = PasswordAnalyzer()
+    assert pa.analyze("")['score'] == 0
+    assert pa.analyze("password")['checks']['common_passwords']['passed'] in (True, False)
+
+
+if __name__ == "__main__":
+    _run_quick_tests()
+
