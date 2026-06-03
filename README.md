@@ -74,6 +74,10 @@ Keyboard support:
 - Minor readability cleanup was applied to the checks table setup.
 - Several micro UI and documentation tweaks were made in small commits for clarity.
 
+## Changelog (short)
+
+- June 2026: UI polish, generator tab refinements, logging and small helpers added.
+
 ## Troubleshooting Tip
 
 - If HIBP lookups fail intermittently, enable debug logging to see network errors:
