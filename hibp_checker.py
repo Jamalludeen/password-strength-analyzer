@@ -8,7 +8,12 @@ logger = logging.getLogger(__name__)
 class HIBPChecker:
     API_URL = "https://api.pwnedpasswords.com/range/"
 
-    def check_password(self, password: str):
+    def check_password(self, password: str) -> tuple[bool, int]:
+        """Check whether `password` appears in HIBP pwned passwords.
+
+        Returns a tuple of (breached: bool, count: int). On network errors
+        the count is -1.
+        """
         sha1_hash = hashlib.sha1(password.encode("utf-8")).hexdigest().upper()
 
         prefix = sha1_hash[:5]
