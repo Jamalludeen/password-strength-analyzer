@@ -102,6 +102,9 @@ class PasswordAnalyzerApp:
 
     # ---------------- UI ---------------- #
     def _create_widgets(self):
+        # Create the main notebook (tabbed) container for Analyzer and Generator.
+        # Keeping layout creation centralized here makes it easier to adjust
+        # overall spacing and add more tabs later.
         self.notebook = ttk.Notebook(self.root)
         self.notebook.pack(fill="both", expand=True)
 
