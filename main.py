@@ -440,6 +440,8 @@ class PasswordAnalyzerApp:
         self.password_entry.bind("<KeyRelease>", self._on_password_typing)
         self.root.bind("<Return>", self._on_enter_key)
         self.root.bind("<Escape>", lambda e: self._reset_ui_for_empty_password())
+        # Keyboard shortcuts: Enter triggers analysis, Esc clears input.
+        # Additional shortcuts can be mapped here as needed.
 
     def _on_enter_key(self, event):
         current_tab = self.notebook.index(self.notebook.select())
