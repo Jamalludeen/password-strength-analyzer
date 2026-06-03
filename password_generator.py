@@ -26,6 +26,13 @@ class PasswordGenerator:
     MIN_LENGTH = 4
     MAX_LENGTH = 128
 
+    def is_ambiguous_char(self, ch: str) -> bool:
+        """Return True when `ch` is considered ambiguous (for avoidance).
+
+        Useful for external tools or tests that want to highlight ambiguous chars.
+        """
+        return ch in self.AMBIGUOUS
+
     def _build_pool(self, options: GeneratorOptions) -> str:
         pool_parts = []
 
@@ -105,3 +112,6 @@ def example_generate() -> List[str]:
     gen = PasswordGenerator()
     opts = GeneratorOptions()
     return gen.generate_many(opts, count=3)
+
+# Validation note: generator enforces minimum length and at least one
+# selected character group when `require_each_selected` is enabled.

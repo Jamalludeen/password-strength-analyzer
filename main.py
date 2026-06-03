@@ -5,6 +5,8 @@ from tkinter import ttk
 # Small note: `PasswordAnalyzerApp` is the main UI entrypoint for the
 # application. This file focuses on UI glue and light presentation helpers.
 
+__version__ = "0.1.0"
+
 from analyzer import PasswordAnalyzer
 from hibp_checker import HIBPChecker
 from password_generator import GeneratorOptions, PasswordGenerator
@@ -100,6 +102,9 @@ class PasswordAnalyzerApp:
 
     # ---------------- UI ---------------- #
     def _create_widgets(self):
+        # Create the main notebook (tabbed) container for Analyzer and Generator.
+        # Keeping layout creation centralized here makes it easier to adjust
+        # overall spacing and add more tabs later.
         self.notebook = ttk.Notebook(self.root)
         self.notebook.pack(fill="both", expand=True)
 
@@ -126,6 +131,16 @@ class PasswordAnalyzerApp:
     def _set_status(self, text, color=None):
         # Centralized status updates keep transient messages consistent.
         self.status_bar.config(text=text, fg=color or self.colors["muted"])
+
+    def _safe_int_parse(self, var, default=0):
+        """Safely parse IntVar-like objects to int with a fallback.
+
+        Useful when reading user-provided spinbox values.
+        """
+        try:
+            return int(var.get())
+        except Exception:
+            return default
 
     def _create_analyzer_tab(self):
         top = tk.Frame(self.analyzer_tab, bg=self.colors["bg"])
@@ -435,6 +450,8 @@ class PasswordAnalyzerApp:
         self.password_entry.bind("<KeyRelease>", self._on_password_typing)
         self.root.bind("<Return>", self._on_enter_key)
         self.root.bind("<Escape>", lambda e: self._reset_ui_for_empty_password())
+        # Keyboard shortcuts: Enter triggers analysis, Esc clears input.
+        # Additional shortcuts can be mapped here as needed.
 
     def _on_enter_key(self, event):
         current_tab = self.notebook.index(self.notebook.select())

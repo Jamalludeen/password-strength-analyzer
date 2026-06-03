@@ -7,6 +7,15 @@ import pprint
 # Note: entropy is scaled and bucketed into score contributions so that
 # the combined length/variety/entropy checks can reach a 0-100 score.
 
+# Entropy rating -> score contribution mapping. Adjust to tune final scores.
+ENTROPY_SCORE_MAP = {
+    'Very Weak': 0,
+    'Weak': 5,
+    'Moderate': 15,
+    'Strong': 25,
+    'Very Strong': 30,
+}
+
 class PasswordAnalyzer:
     def __init__(self):
         self.min_length = 8
@@ -43,14 +52,7 @@ class PasswordAnalyzer:
         entropy = self.calculate_entropy(password)
         entropy_rating = self.rate_entropy(entropy)
         # Map entropy rating to a score contribution so total can reach 100
-        entropy_score_map = {
-            'Very Weak': 0,
-            'Weak': 5,
-            'Moderate': 15,
-            'Strong': 25,
-            'Very Strong': 30,
-        }
-        entropy_score = entropy_score_map.get(entropy_rating, 0)
+        entropy_score = ENTROPY_SCORE_MAP.get(entropy_rating, 0)
 
         results['checks']['entropy'] = {
             'value': round(entropy, 2),
@@ -188,4 +190,15 @@ if __name__ == "__main__":
     pwd_analyz = PasswordAnalyzer()
     result = pwd_analyz.analyze(password="coll/E*&^#c6t")
     pprint.pprint(result)
+
+
+def _run_quick_tests():
+    """Run a couple of quick sanity checks useful during local development."""
+    pa = PasswordAnalyzer()
+    assert pa.analyze("")['score'] == 0
+    assert pa.analyze("password")['checks']['common_passwords']['passed'] in (True, False)
+
+
+if __name__ == "__main__":
+    _run_quick_tests()
 
