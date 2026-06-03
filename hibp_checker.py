@@ -5,6 +5,9 @@ import requests
 # Use a module-level logger so callers can configure verbosity externally.
 logger = logging.getLogger(__name__)
 
+# This module uses the k-Anonymity model: only the first 5 SHA-1 hex
+# characters are sent to the HIBP API to avoid sending full hashes.
+
 class HIBPChecker:
     API_URL = "https://api.pwnedpasswords.com/range/"
 
