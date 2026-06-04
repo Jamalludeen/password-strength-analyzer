@@ -461,6 +461,7 @@ class PasswordAnalyzerApp:
         # Additional shortcuts can be mapped here as needed.
 
     def _on_enter_key(self, event):
+        # Enter runs the primary action for the active tab.
         current_tab = self.notebook.index(self.notebook.select())
         if current_tab == 0:
             self.analyze_password()
