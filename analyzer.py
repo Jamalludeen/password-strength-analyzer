@@ -191,6 +191,10 @@ class PasswordAnalyzer:
         """Return True when a score is close to the maximum bucket."""
         return score >= 90
 
+    def has_common_password_penalty(self, password: str) -> bool:
+        """Return True when `password` is part of the common-password list."""
+        return password.lower() in self.common_passwords
+
         
 if __name__ == "__main__":
     pwd_analyz = PasswordAnalyzer()
