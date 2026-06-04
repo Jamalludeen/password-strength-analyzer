@@ -38,6 +38,10 @@ class PasswordGenerator:
         groups = self._selected_groups(options)
         return all(any(ch in group for ch in password) for group in groups)
 
+    def meets_min_length(self, options: GeneratorOptions) -> bool:
+        """Return True when the configured length is within accepted bounds."""
+        return self.MIN_LENGTH <= options.length <= self.MAX_LENGTH
+
     def _build_pool(self, options: GeneratorOptions) -> str:
         pool_parts = []
 
