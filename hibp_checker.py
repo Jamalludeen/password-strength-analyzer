@@ -41,10 +41,20 @@ class HIBPChecker:
             # Network errors should not crash the UI; report via logger.
             logger.debug("Error checking HIBP: %s", e)
             return False, -1
+
+
+def format_hibp_result(result: tuple[bool, int]) -> str:
+    """Return a compact human-readable HIBP result string."""
+    breached, count = result
+    if count < 0:
+        return "HIBP check failed"
+    if breached:
+        return f"Breached {count} times"
+    return "Not found in HIBP"
         
 if __name__ == "__main__":
     # Configure simple logging for local debugging when run directly.
     logging.basicConfig(level=logging.DEBUG, format="%(levelname)s: %(message)s")
     hibp_checker = HIBPChecker()
     result = hibp_checker.check_password("admin")
-    print(result)
+    print(format_hibp_result(result))
