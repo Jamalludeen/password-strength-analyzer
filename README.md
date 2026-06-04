@@ -77,6 +77,7 @@ Keyboard support:
 ## Changelog (short)
 
 - June 2026: UI polish, generator tab refinements, logging and small helpers added.
+- June 2026: Follow-up micro commits added tiny helpers and clearer notes.
 
 ## Troubleshooting Tip
 
