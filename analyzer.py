@@ -71,6 +71,8 @@ class PasswordAnalyzer:
 
         if is_common:
             results['score'] = max(0, results['score'] - 50)
+            # Common passwords get an explicit penalty so they remain low even
+            # when they look superficially strong in length or character mix.
         
         results['recommendations'] = self.generate_recommendations(results)
         results['strength'] = self.get_strength_label(results['score'])
@@ -184,6 +186,14 @@ class PasswordAnalyzer:
             recommendations.append('Add special characters (!@#$%^&*)')
 
         return recommendations
+
+    def score_is_near_max(self, score: int) -> bool:
+        """Return True when a score is close to the maximum bucket."""
+        return score >= 90
+
+    def has_common_password_penalty(self, password: str) -> bool:
+        """Return True when `password` is part of the common-password list."""
+        return password.lower() in self.common_passwords
 
         
 if __name__ == "__main__":
