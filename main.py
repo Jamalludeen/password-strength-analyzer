@@ -64,6 +64,7 @@ class PasswordAnalyzerApp:
         self._setup_styles()
         self._create_widgets()
         self._bind_events()
+        self._update_window_title()
 
     # ---------------- STYLES ---------------- #
     def _setup_styles(self):
@@ -141,6 +142,12 @@ class PasswordAnalyzerApp:
             return int(var.get())
         except Exception:
             return default
+
+    def _update_window_title(self, suffix=""):
+        title = f"Password Strength Analyzer v{__version__}"
+        if suffix:
+            title = f"{title} - {suffix}"
+        self.root.title(title)
 
     def _create_analyzer_tab(self):
         top = tk.Frame(self.analyzer_tab, bg=self.colors["bg"])
