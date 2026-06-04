@@ -54,6 +54,8 @@ def format_hibp_result(result: tuple[bool, int]) -> str:
         
 if __name__ == "__main__":
     # Configure simple logging for local debugging when run directly.
+    # The sample password is intentionally common so the formatter can show
+    # the breached-path output during a quick manual check.
     logging.basicConfig(level=logging.DEBUG, format="%(levelname)s: %(message)s")
     hibp_checker = HIBPChecker()
     result = hibp_checker.check_password("admin")
