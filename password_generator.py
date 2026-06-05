@@ -23,6 +23,7 @@ class GeneratorOptions:
 
 class PasswordGenerator:
     AMBIGUOUS = set("0O1lI")
+    SYMBOLS = "!@#$%^&*()-_=+[]{};:,.?/\\|~"
     MIN_LENGTH = 4
     MAX_LENGTH = 128
 
@@ -42,6 +43,11 @@ class PasswordGenerator:
         """Return True when the configured length is within accepted bounds."""
         return self.MIN_LENGTH <= options.length <= self.MAX_LENGTH
 
+    def validate_options(self, options: GeneratorOptions) -> None:
+        """Raise ValueError when options are clearly invalid."""
+        if not self.meets_min_length(options):
+            raise ValueError(f"Length must be between {self.MIN_LENGTH} and {self.MAX_LENGTH}")
+
     def _build_pool(self, options: GeneratorOptions) -> str:
         pool_parts = []
 
@@ -52,7 +58,7 @@ class PasswordGenerator:
         if options.use_digits:
             pool_parts.append(string.digits)
         if options.use_symbols:
-            pool_parts.append("!@#$%^&*()-_=+[]{};:,.?/\\|~")
+            pool_parts.append(self.SYMBOLS)
 
         pool = "".join(pool_parts)
         if options.avoid_ambiguous:
@@ -70,7 +76,7 @@ class PasswordGenerator:
         if options.use_digits:
             groups.append(string.digits)
         if options.use_symbols:
-            groups.append("!@#$%^&*()-_=+[]{};:,.?/\\|~")
+            groups.append(self.SYMBOLS)
 
         if options.avoid_ambiguous:
             groups = ["".join(ch for ch in group if ch not in self.AMBIGUOUS) for group in groups]
@@ -78,6 +84,7 @@ class PasswordGenerator:
         return [group for group in groups if group]
 
     def generate_one(self, options: GeneratorOptions) -> str:
+        self.validate_options(options)
         groups = self._selected_groups(options)
         if not groups:
             raise ValueError("At least one character type must be selected")

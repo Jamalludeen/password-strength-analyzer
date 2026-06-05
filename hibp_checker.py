@@ -10,6 +10,7 @@ logger = logging.getLogger(__name__)
 
 class HIBPChecker:
     API_URL = "https://api.pwnedpasswords.com/range/"
+    TIMEOUT_SECONDS = 10
 
     def check_password(self, password: str) -> tuple[bool, int]:
         """Check whether `password` appears in HIBP pwned passwords.
@@ -17,13 +18,16 @@ class HIBPChecker:
         Returns a tuple of (breached: bool, count: int). On network errors
         the count is -1.
         """
+        if not password:
+            return False, 0
+
         sha1_hash = hashlib.sha1(password.encode("utf-8")).hexdigest().upper()
 
         prefix = sha1_hash[:5]
         suffix = sha1_hash[5:]
 
         try:
-            response = requests.get(f"{self.API_URL}{prefix}", timeout=10)
+            response = requests.get(f"{self.API_URL}{prefix}", timeout=self.TIMEOUT_SECONDS)
             response.raise_for_status()
 
             for line in response.text.splitlines():

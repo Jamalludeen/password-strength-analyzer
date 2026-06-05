@@ -133,6 +133,10 @@ class PasswordAnalyzerApp:
         # Centralized status updates keep transient messages consistent.
         self.status_bar.config(text=text, fg=color or self.colors["muted"])
 
+    def _status_with_prefix(self, prefix, text):
+        """Return a status message with a compact prefix format."""
+        return f"[{prefix}] {text}"
+
     def _safe_int_parse(self, var, default=0):
         """Safely parse IntVar-like objects to int with a fallback.
 
@@ -144,6 +148,7 @@ class PasswordAnalyzerApp:
             return default
 
     def _update_window_title(self, suffix=""):
+        # Include version in the title so screenshots/logs show app revision.
         title = f"Password Strength Analyzer v{__version__}"
         if suffix:
             title = f"{title} - {suffix}"
@@ -554,6 +559,7 @@ class PasswordAnalyzerApp:
         if not self.current_results:
             return
 
+        # Keep history rows compact so the list remains readable at 10 entries.
         entry = (
             f"{self.current_results['masked_password']} | "
             f"Score {self.current_results['score']}/100 | "

@@ -1,3 +1,4 @@
+# Quick environment probe script for local troubleshooting.
 import sys
 import platform
 
