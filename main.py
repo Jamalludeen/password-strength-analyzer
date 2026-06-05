@@ -133,6 +133,10 @@ class PasswordAnalyzerApp:
         # Centralized status updates keep transient messages consistent.
         self.status_bar.config(text=text, fg=color or self.colors["muted"])
 
+    def _status_with_prefix(self, prefix, text):
+        """Return a status message with a compact prefix format."""
+        return f"[{prefix}] {text}"
+
     def _safe_int_parse(self, var, default=0):
         """Safely parse IntVar-like objects to int with a fallback.
 
