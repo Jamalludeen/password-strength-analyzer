@@ -23,6 +23,7 @@ class GeneratorOptions:
 
 class PasswordGenerator:
     AMBIGUOUS = set("0O1lI")
+    SYMBOLS = "!@#$%^&*()-_=+[]{};:,.?/\\|~"
     MIN_LENGTH = 4
     MAX_LENGTH = 128
 
@@ -52,7 +53,7 @@ class PasswordGenerator:
         if options.use_digits:
             pool_parts.append(string.digits)
         if options.use_symbols:
-            pool_parts.append("!@#$%^&*()-_=+[]{};:,.?/\\|~")
+            pool_parts.append(self.SYMBOLS)
 
         pool = "".join(pool_parts)
         if options.avoid_ambiguous:
@@ -70,7 +71,7 @@ class PasswordGenerator:
         if options.use_digits:
             groups.append(string.digits)
         if options.use_symbols:
-            groups.append("!@#$%^&*()-_=+[]{};:,.?/\\|~")
+            groups.append(self.SYMBOLS)
 
         if options.avoid_ambiguous:
             groups = ["".join(ch for ch in group if ch not in self.AMBIGUOUS) for group in groups]
