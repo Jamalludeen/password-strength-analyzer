@@ -173,6 +173,7 @@ class PasswordAnalyzer:
         return 'Very Strong'
     
     def generate_recommendations(self, results: Dict) -> List[str]:
+        # Recommendations intentionally focus on actionable, user-facing text.
         recommendations = []
         checks = results['checks']
 
