@@ -18,6 +18,9 @@ class HIBPChecker:
         Returns a tuple of (breached: bool, count: int). On network errors
         the count is -1.
         """
+        if not password:
+            return False, 0
+
         sha1_hash = hashlib.sha1(password.encode("utf-8")).hexdigest().upper()
 
         prefix = sha1_hash[:5]
