@@ -89,3 +89,7 @@ Keyboard support:
   ```
 
   This will surface connection errors from the HIBP helper during local runs.
+
+## Maintenance Tip
+
+- Keep helper functions small and focused to make micro-commit reviews easier.
