@@ -559,6 +559,7 @@ class PasswordAnalyzerApp:
         if not self.current_results:
             return
 
+        # Keep history rows compact so the list remains readable at 10 entries.
         entry = (
             f"{self.current_results['masked_password']} | "
             f"Score {self.current_results['score']}/100 | "
