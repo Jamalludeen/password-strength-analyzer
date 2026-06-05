@@ -93,3 +93,7 @@ Keyboard support:
 ## Maintenance Tip
 
 - Keep helper functions small and focused to make micro-commit reviews easier.
+
+## Quick Commands
+
+- Syntax check: `python -m py_compile main.py analyzer.py hibp_checker.py password_generator.py`
