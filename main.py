@@ -143,6 +143,7 @@ class PasswordAnalyzerApp:
 
         Useful when reading user-provided spinbox values.
         """
+        # Tkinter variables can raise TclError when their text is incomplete.
         try:
             return int(var.get())
         except Exception:
