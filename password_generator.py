@@ -102,6 +102,7 @@ class PasswordGenerator:
             raise ValueError("Character pool is empty with current options")
 
         if options.require_each_selected and options.length < len(groups):
+            # One required character per selected group needs enough space.
             raise ValueError("Length must be at least number of selected character sets")
 
         chars = []
