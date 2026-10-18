@@ -137,6 +137,8 @@ class PasswordAnalyzer:
         if not password:
             return 0
         
+        # Character frequencies are enough for Shannon entropy; no password
+        # text is retained after this local calculation.
         char_count = {}
         for char in password:
             char_count[char] = char_count.get(char, 0) + 1
