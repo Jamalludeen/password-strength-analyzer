@@ -4,3 +4,4 @@ Contribution guidelines
 - Run `python -m py_compile` to check for syntax errors.
 - Open a PR with a short description of the intent.
 - Prefer concise commit messages that describe one change.
+- Include validation results when a change affects runnable code.
