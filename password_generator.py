@@ -116,6 +116,7 @@ class PasswordGenerator:
         return "".join(chars)
 
     def generate_many(self, options: GeneratorOptions, count: int = 5) -> List[str]:
+        """Generate `count` independent passwords with the same options."""
         if count < 1:
             raise ValueError("Count must be at least 1")
 
