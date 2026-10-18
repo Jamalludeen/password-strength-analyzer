@@ -51,6 +51,7 @@ class PasswordGenerator:
             raise ValueError(f"Length must be between {self.MIN_LENGTH} and {self.MAX_LENGTH}")
 
     def _build_pool(self, options: GeneratorOptions) -> str:
+        # Build the pool once, then apply ambiguity filtering consistently.
         pool_parts = []
 
         if options.use_lowercase:
