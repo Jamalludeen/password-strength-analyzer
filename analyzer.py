@@ -167,6 +167,7 @@ class PasswordAnalyzer:
         return 'Very Strong'
     
     def get_strength_label(self, score: int) -> str:
+        # Labels intentionally mirror the entropy vocabulary used in the UI.
         if score < 20:
             return 'Very Weak'
         elif score < 40:
