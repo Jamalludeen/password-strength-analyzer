@@ -86,6 +86,7 @@ class PasswordAnalyzer:
         return results
 
     def mask_password(self, password: str) -> str:
+        """Keep only the first and last characters visible in summaries."""
         if not password:
             return ''
 
