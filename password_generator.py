@@ -22,6 +22,8 @@ class GeneratorOptions:
 
 
 class PasswordGenerator:
+    """Generate configurable passwords while honoring selected character sets."""
+
     AMBIGUOUS = set("0O1lI")
     SYMBOLS = "!@#$%^&*()-_=+[]{};:,.?/\\|~"
     MIN_LENGTH = 4
