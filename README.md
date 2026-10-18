@@ -57,6 +57,8 @@ The app now uses a tabbed layout to keep the interface focused:
 3. Switch to the Generator tab to create new passwords with the options you want.
 4. Copy a generated password, or send it back to the Analyzer tab for a full check.
 
+The analyzer keeps passwords masked in its recent-history display.
+
 Keyboard support:
 
 - `Enter` runs the active tab action.
