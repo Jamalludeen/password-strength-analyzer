@@ -17,6 +17,8 @@ ENTROPY_SCORE_MAP = {
 }
 
 class PasswordAnalyzer:
+    """Calculate password scores and user-facing recommendations."""
+
     def __init__(self):
         self.min_length = 8
         self.base_dir = Path(__file__).resolve().parent
