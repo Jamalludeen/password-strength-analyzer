@@ -34,6 +34,7 @@ class HIBPChecker:
                 if ":" not in line:
                     continue
 
+                # HIBP returns suffix/count pairs, one record per line.
                 hash_suffix, count = line.split(":", 1)
 
                 if hash_suffix == suffix:
