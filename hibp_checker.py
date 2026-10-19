@@ -34,6 +34,7 @@ class HIBPChecker:
                 if ":" not in line:
                     continue
 
+                # HIBP returns suffix/count pairs, one record per line.
                 hash_suffix, count = line.split(":", 1)
 
                 if hash_suffix == suffix:
@@ -48,7 +49,10 @@ class HIBPChecker:
 
 
 def format_hibp_result(result: tuple[bool, int]) -> str:
-    """Return a compact human-readable HIBP result string."""
+    """Return a compact human-readable HIBP result string.
+
+    A negative count represents a request failure rather than a breach result.
+    """
     breached, count = result
     if count < 0:
         return "HIBP check failed"

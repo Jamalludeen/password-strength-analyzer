@@ -17,6 +17,8 @@ ENTROPY_SCORE_MAP = {
 }
 
 class PasswordAnalyzer:
+    """Calculate password scores and user-facing recommendations."""
+
     def __init__(self):
         self.min_length = 8
         self.base_dir = Path(__file__).resolve().parent
@@ -84,6 +86,7 @@ class PasswordAnalyzer:
         return results
 
     def mask_password(self, password: str) -> str:
+        """Keep only the first and last characters visible in summaries."""
         if not password:
             return ''
 
@@ -134,6 +137,8 @@ class PasswordAnalyzer:
         if not password:
             return 0
         
+        # Character frequencies are enough for Shannon entropy; no password
+        # text is retained after this local calculation.
         char_count = {}
         for char in password:
             char_count[char] = char_count.get(char, 0) + 1
@@ -162,6 +167,7 @@ class PasswordAnalyzer:
         return 'Very Strong'
     
     def get_strength_label(self, score: int) -> str:
+        # Labels intentionally mirror the entropy vocabulary used in the UI.
         if score < 20:
             return 'Very Weak'
         elif score < 40:

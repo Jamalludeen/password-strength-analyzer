@@ -131,6 +131,7 @@ class PasswordAnalyzerApp:
 
     def _set_status(self, text, color=None):
         # Centralized status updates keep transient messages consistent.
+        # Keeping this in one place also makes future status styling changes local.
         self.status_bar.config(text=text, fg=color or self.colors["muted"])
 
     def _status_with_prefix(self, prefix, text):
@@ -142,6 +143,7 @@ class PasswordAnalyzerApp:
 
         Useful when reading user-provided spinbox values.
         """
+        # Tkinter variables can raise TclError when their text is incomplete.
         try:
             return int(var.get())
         except Exception:

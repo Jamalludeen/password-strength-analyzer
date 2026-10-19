@@ -57,6 +57,8 @@ The app now uses a tabbed layout to keep the interface focused:
 3. Switch to the Generator tab to create new passwords with the options you want.
 4. Copy a generated password, or send it back to the Analyzer tab for a full check.
 
+The analyzer keeps passwords masked in its recent-history display.
+
 Keyboard support:
 
 - `Enter` runs the active tab action.
@@ -97,3 +99,4 @@ Keyboard support:
 ## Quick Commands
 
 - Syntax check: `python -m py_compile main.py analyzer.py hibp_checker.py password_generator.py`
+- Environment probe: `python3 scripts/check_env.py`

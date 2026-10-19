@@ -22,6 +22,8 @@ class GeneratorOptions:
 
 
 class PasswordGenerator:
+    """Generate configurable passwords while honoring selected character sets."""
+
     AMBIGUOUS = set("0O1lI")
     SYMBOLS = "!@#$%^&*()-_=+[]{};:,.?/\\|~"
     MIN_LENGTH = 4
@@ -49,6 +51,7 @@ class PasswordGenerator:
             raise ValueError(f"Length must be between {self.MIN_LENGTH} and {self.MAX_LENGTH}")
 
     def _build_pool(self, options: GeneratorOptions) -> str:
+        # Build the pool once, then apply ambiguity filtering consistently.
         pool_parts = []
 
         if options.use_lowercase:
@@ -100,6 +103,7 @@ class PasswordGenerator:
             raise ValueError("Character pool is empty with current options")
 
         if options.require_each_selected and options.length < len(groups):
+            # One required character per selected group needs enough space.
             raise ValueError("Length must be at least number of selected character sets")
 
         chars = []
@@ -114,6 +118,7 @@ class PasswordGenerator:
         return "".join(chars)
 
     def generate_many(self, options: GeneratorOptions, count: int = 5) -> List[str]:
+        """Generate `count` independent passwords with the same options."""
         if count < 1:
             raise ValueError("Count must be at least 1")
 
