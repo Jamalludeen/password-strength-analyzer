@@ -136,6 +136,7 @@ class PasswordAnalyzerApp:
 
     def _status_with_prefix(self, prefix, text):
         """Return a status message with a compact prefix format."""
+        # Prefixes make status messages easier to scan during longer sessions.
         return f"[{prefix}] {text}"
 
     def _safe_int_parse(self, var, default=0):
