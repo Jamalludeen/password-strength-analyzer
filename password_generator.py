@@ -48,6 +48,7 @@ class PasswordGenerator:
 
     def validate_options(self, options: GeneratorOptions) -> None:
         """Raise ValueError when options are clearly invalid."""
+        # Validate before constructing pools so invalid UI values fail early.
         if not self.meets_min_length(options):
             raise ValueError(f"Length must be between {self.MIN_LENGTH} and {self.MAX_LENGTH}")
 
