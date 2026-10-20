@@ -34,6 +34,7 @@ class PasswordGenerator:
 
         Useful for external tools or tests that want to highlight ambiguous chars.
         """
+        # Keep this check centralized so filtering and callers share one rule.
         return ch in self.AMBIGUOUS
 
     def covers_all_selected_groups(self, password: str, options: GeneratorOptions) -> bool:
