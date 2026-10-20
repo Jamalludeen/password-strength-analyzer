@@ -207,6 +207,7 @@ class PasswordAnalyzer:
 
     def _clamp_score(self, score: int) -> int:
         """Clamp scores to the documented 0-100 range."""
+        # Clamping keeps UI progress bars valid even after future scoring changes.
         return max(0, min(100, score))
 
         
