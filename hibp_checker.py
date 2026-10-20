@@ -18,6 +18,7 @@ class HIBPChecker:
         Returns a tuple of (breached: bool, count: int). On network errors
         the count is -1.
         """
+        # Empty input is handled locally and does not require a network call.
         if not password:
             return False, 0
 
