@@ -96,6 +96,7 @@ class PasswordAnalyzer:
         return f"{password[0]}{'*' * (len(password) - 2)}{password[-1]}"
 
     def build_summary(self, results: Dict) -> str:
+        """Build the compact summary shown by the UI copy action."""
         return (
             f"Score: {results['score']}/100 | "
             f"Strength: {results['strength']} | "
