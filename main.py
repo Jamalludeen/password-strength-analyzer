@@ -96,6 +96,7 @@ class PasswordAnalyzerApp:
         )
 
     def _configure_panel(self, widget):
+        # Panel configuration keeps the dark theme consistent across Tk frames.
         widget.configure(bg=self.colors["panel"])
 
     def _configure_label(self, widget, color=None):
