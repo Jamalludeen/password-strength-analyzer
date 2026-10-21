@@ -28,6 +28,7 @@ class HIBPChecker:
         suffix = sha1_hash[5:]
 
         try:
+            # The range endpoint preserves k-Anonymity while limiting payload size.
             response = requests.get(f"{self.API_URL}{prefix}", timeout=self.TIMEOUT_SECONDS)
             response.raise_for_status()
 

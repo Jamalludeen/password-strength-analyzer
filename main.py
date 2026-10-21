@@ -100,6 +100,7 @@ class PasswordAnalyzerApp:
         widget.configure(bg=self.colors["panel"])
 
     def _configure_label(self, widget, color=None):
+        # Labels inherit the panel background unless a custom foreground is supplied.
         widget.configure(bg=self.colors["panel"], fg=color or self.colors["text"])
 
     # ---------------- UI ---------------- #
