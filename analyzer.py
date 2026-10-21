@@ -96,6 +96,7 @@ class PasswordAnalyzer:
         return f"{password[0]}{'*' * (len(password) - 2)}{password[-1]}"
 
     def build_summary(self, results: Dict) -> str:
+        """Build the compact summary shown by the UI copy action."""
         return (
             f"Score: {results['score']}/100 | "
             f"Strength: {results['strength']} | "
@@ -206,6 +207,7 @@ class PasswordAnalyzer:
 
     def _clamp_score(self, score: int) -> int:
         """Clamp scores to the documented 0-100 range."""
+        # Clamping keeps UI progress bars valid even after future scoring changes.
         return max(0, min(100, score))
 
         

@@ -18,6 +18,7 @@ class HIBPChecker:
         Returns a tuple of (breached: bool, count: int). On network errors
         the count is -1.
         """
+        # Empty input is handled locally and does not require a network call.
         if not password:
             return False, 0
 
@@ -53,6 +54,7 @@ def format_hibp_result(result: tuple[bool, int]) -> str:
 
     A negative count represents a request failure rather than a breach result.
     """
+    # Keep formatting separate from the network checker for easy UI reuse.
     breached, count = result
     if count < 0:
         return "HIBP check failed"

@@ -96,6 +96,7 @@ class PasswordAnalyzerApp:
         )
 
     def _configure_panel(self, widget):
+        # Panel configuration keeps the dark theme consistent across Tk frames.
         widget.configure(bg=self.colors["panel"])
 
     def _configure_label(self, widget, color=None):
@@ -136,6 +137,7 @@ class PasswordAnalyzerApp:
 
     def _status_with_prefix(self, prefix, text):
         """Return a status message with a compact prefix format."""
+        # Prefixes make status messages easier to scan during longer sessions.
         return f"[{prefix}] {text}"
 
     def _safe_int_parse(self, var, default=0):
@@ -151,6 +153,7 @@ class PasswordAnalyzerApp:
 
     def _update_window_title(self, suffix=""):
         # Include version in the title so screenshots/logs show app revision.
+        # A suffix lets future views identify their active context.
         title = f"Password Strength Analyzer v{__version__}"
         if suffix:
             title = f"{title} - {suffix}"
