@@ -39,6 +39,7 @@ class PasswordGenerator:
 
     def covers_all_selected_groups(self, password: str, options: GeneratorOptions) -> bool:
         """Return True if `password` contains every selected character group."""
+        # An empty selection is vacuously satisfied, matching the helper's boolean contract.
         groups = self._selected_groups(options)
         return all(any(ch in group for ch in password) for group in groups)
 
