@@ -1,4 +1,4 @@
-import random
+import secrets
 import string
 from dataclasses import dataclass
 from typing import List
@@ -28,6 +28,7 @@ class PasswordGenerator:
     SYMBOLS = "!@#$%^&*()-_=+[]{};:,.?/\\|~"
     MIN_LENGTH = 4
     MAX_LENGTH = 128
+    SECURE_RANDOM = secrets.SystemRandom()
 
     def is_ambiguous_char(self, ch: str) -> bool:
         """Return True when `ch` is considered ambiguous (for avoidance).
@@ -112,12 +113,12 @@ class PasswordGenerator:
         chars = []
         if options.require_each_selected:
             for group in groups:
-                chars.append(random.choice(group))
+                chars.append(self.SECURE_RANDOM.choice(group))
 
         while len(chars) < options.length:
-            chars.append(random.choice(pool))
+            chars.append(self.SECURE_RANDOM.choice(pool))
 
-        random.shuffle(chars)
+        self.SECURE_RANDOM.shuffle(chars)
         return "".join(chars)
 
     def generate_many(self, options: GeneratorOptions, count: int = 5) -> List[str]:

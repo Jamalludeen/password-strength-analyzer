@@ -483,7 +483,7 @@ class PasswordAnalyzerApp:
         self.password_entry.config(show="" if self.show_password.get() else "•")
 
     def _on_password_typing(self, event):
-        password = self.password_entry.get().strip()
+        password = self.password_entry.get()
 
         self.analyze_btn.config(state="normal" if password and not self.is_checking_hibp else "disabled")
 
@@ -497,7 +497,7 @@ class PasswordAnalyzerApp:
 
     # ---------------- LOGIC ---------------- #
     def analyze_password(self):
-        password = self.password_entry.get().strip()
+        password = self.password_entry.get()
         if not password:
             return
 
@@ -556,7 +556,7 @@ class PasswordAnalyzerApp:
             self.last_summary_text = self._format_summary_text(self.current_results, hibp_summary)
             self._append_history_entry(hibp_summary)
 
-        if self.password_entry.get().strip():
+        if self.password_entry.get():
             self.analyze_btn.config(state="normal")
         else:
             self.analyze_btn.config(state="disabled")
