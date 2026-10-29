@@ -105,7 +105,7 @@ class PasswordAnalyzer:
     
     def load_common_passwords(self) -> set:
         """
-        Load common passwords from file
+        Load common passwords from the bundled data file.
         """
         try:
             with open(self.base_dir / 'data/common_passwords.txt', 'r') as f:

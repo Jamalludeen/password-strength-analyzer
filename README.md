@@ -102,3 +102,5 @@ Keyboard support:
 - Environment probe: `python3 scripts/check_env.py`
 
 Small documentation changes can be committed independently for easier review.
+
+The project keeps analyzer, breach-checking, and generation logic in separate modules.
