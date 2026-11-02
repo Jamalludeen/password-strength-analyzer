@@ -68,6 +68,7 @@ class PasswordGenerator:
             pool_parts.append(self.SYMBOLS)
 
         pool = "".join(pool_parts)
+        # Pool order does not affect randomness because selection is uniform.
         if options.avoid_ambiguous:
             pool = "".join(ch for ch in pool if ch not in self.AMBIGUOUS)
 
