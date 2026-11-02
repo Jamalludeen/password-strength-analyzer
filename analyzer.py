@@ -35,6 +35,7 @@ class PasswordAnalyzer:
             'checks': {},
             'recommendations': []
         }
+        # Keep this structure stable so UI rendering can rely on consistent keys.
 
         # check for password length
         length_score = min(len(password) * 2, 25)
@@ -226,4 +227,3 @@ def _run_quick_tests():
 
 if __name__ == "__main__":
     _run_quick_tests()
-
