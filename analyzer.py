@@ -132,6 +132,7 @@ class PasswordAnalyzer:
 
             if has_type:
                 score += points
+        # Variety points are additive so users get credit for each category present.
         return score
         
     def calculate_entropy(self, password: str) -> float:
