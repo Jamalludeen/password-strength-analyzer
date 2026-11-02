@@ -4,3 +4,4 @@ Quick notes
 - Use the README for user-facing updates.
 - Prefer helper methods when a check is reused.
 - Run a quick local syntax check before pushing stacked micro commits.
+- Keep one-purpose commits to simplify rollback and review.
