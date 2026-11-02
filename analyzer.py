@@ -35,6 +35,7 @@ class PasswordAnalyzer:
             'checks': {},
             'recommendations': []
         }
+        # Keep this structure stable so UI rendering can rely on consistent keys.
 
         # check for password length
         length_score = min(len(password) * 2, 25)
@@ -131,6 +132,7 @@ class PasswordAnalyzer:
 
             if has_type:
                 score += points
+        # Variety points are additive so users get credit for each category present.
         return score
         
     def calculate_entropy(self, password: str) -> float:
@@ -226,4 +228,3 @@ def _run_quick_tests():
 
 if __name__ == "__main__":
     _run_quick_tests()
-

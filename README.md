@@ -75,6 +75,7 @@ Keyboard support:
 - UI theme consistency has been improved across tabs and summary panels.
 - Minor readability cleanup was applied to the checks table setup.
 - Several micro UI and documentation tweaks were made in small commits for clarity.
+- Small review-focused commits are welcome when they improve traceability.
 
 ## Changelog (short)
 
@@ -100,6 +101,7 @@ Keyboard support:
 
 - Syntax check: `python -m py_compile main.py analyzer.py hibp_checker.py password_generator.py`
 - Environment probe: `python3 scripts/check_env.py`
+- Keep command snippets copy-paste ready to reduce onboarding friction.
 
 Small documentation changes can be committed independently for easier review.
 

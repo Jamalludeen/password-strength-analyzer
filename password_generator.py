@@ -68,6 +68,7 @@ class PasswordGenerator:
             pool_parts.append(self.SYMBOLS)
 
         pool = "".join(pool_parts)
+        # Pool order does not affect randomness because selection is uniform.
         if options.avoid_ambiguous:
             pool = "".join(ch for ch in pool if ch not in self.AMBIGUOUS)
 
@@ -111,6 +112,7 @@ class PasswordGenerator:
             raise ValueError("Length must be at least number of selected character sets")
 
         chars = []
+        # Seed with one char per group before filling remainder from full pool.
         if options.require_each_selected:
             for group in groups:
                 chars.append(self.SECURE_RANDOM.choice(group))
