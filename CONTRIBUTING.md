@@ -5,3 +5,4 @@ Contribution guidelines
 - Open a PR with a short description of the intent.
 - Prefer concise commit messages that describe one change.
 - Include validation results when a change affects runnable code.
+- Keep review comments actionable and tied to a specific file update.
