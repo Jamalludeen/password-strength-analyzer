@@ -101,6 +101,7 @@ Keyboard support:
 
 - Syntax check: `python -m py_compile main.py analyzer.py hibp_checker.py password_generator.py`
 - Environment probe: `python3 scripts/check_env.py`
+- Keep command snippets copy-paste ready to reduce onboarding friction.
 
 Small documentation changes can be committed independently for easier review.
 
