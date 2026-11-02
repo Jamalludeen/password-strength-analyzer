@@ -26,6 +26,7 @@ class HIBPChecker:
 
         prefix = sha1_hash[:5]
         suffix = sha1_hash[5:]
+        # Prefix/suffix split keeps the full hash local to the client.
 
         try:
             # The range endpoint preserves k-Anonymity while limiting payload size.
