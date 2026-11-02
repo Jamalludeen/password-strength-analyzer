@@ -112,6 +112,7 @@ class PasswordGenerator:
             raise ValueError("Length must be at least number of selected character sets")
 
         chars = []
+        # Seed with one char per group before filling remainder from full pool.
         if options.require_each_selected:
             for group in groups:
                 chars.append(self.SECURE_RANDOM.choice(group))
