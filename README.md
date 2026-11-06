@@ -85,6 +85,7 @@ Keyboard support:
 ## Troubleshooting Tip
 
 - If HIBP lookups fail intermittently, enable debug logging to see network errors:
+- If UI actions appear unresponsive, check the status bar for context before retrying.
 
   ```python
   import logging
