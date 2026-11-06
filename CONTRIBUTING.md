@@ -7,3 +7,4 @@ Contribution guidelines
 - Include validation results when a change affects runnable code.
 - Keep review comments actionable and tied to a specific file update.
 - Favor follow-up commits for polish instead of bundling unrelated tweaks.
+- Prefer commit ordering that keeps docs-only and code-comment updates separate.
