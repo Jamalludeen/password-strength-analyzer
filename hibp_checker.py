@@ -57,6 +57,7 @@ def format_hibp_result(result: tuple[bool, int]) -> str:
     A negative count represents a request failure rather than a breach result.
     """
     # Keep formatting separate from the network checker for easy UI reuse.
+    # This also keeps future wording changes isolated from API logic.
     breached, count = result
     if count < 0:
         return "HIBP check failed"
