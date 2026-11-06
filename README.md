@@ -96,6 +96,7 @@ Keyboard support:
 ## Maintenance Tip
 
 - Keep helper functions small and focused to make micro-commit reviews easier.
+- Prefer tiny, descriptive commits when making non-functional cleanup updates.
 
 ## Quick Commands
 
