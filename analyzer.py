@@ -98,6 +98,7 @@ class PasswordAnalyzer:
 
     def build_summary(self, results: Dict) -> str:
         """Build the compact summary shown by the UI copy action."""
+        # Keep this line compact so it fits status/toast style UI surfaces.
         return (
             f"Score: {results['score']}/100 | "
             f"Strength: {results['strength']} | "

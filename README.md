@@ -85,6 +85,7 @@ Keyboard support:
 ## Troubleshooting Tip
 
 - If HIBP lookups fail intermittently, enable debug logging to see network errors:
+- If UI actions appear unresponsive, check the status bar for context before retrying.
 
   ```python
   import logging
@@ -96,6 +97,7 @@ Keyboard support:
 ## Maintenance Tip
 
 - Keep helper functions small and focused to make micro-commit reviews easier.
+- Prefer tiny, descriptive commits when making non-functional cleanup updates.
 
 ## Quick Commands
 

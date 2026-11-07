@@ -75,6 +75,7 @@ class PasswordGenerator:
         return pool
 
     def _selected_groups(self, options: GeneratorOptions) -> List[str]:
+        # Build groups first, then filter empty groups after ambiguity removal.
         groups = []
 
         if options.use_lowercase:
